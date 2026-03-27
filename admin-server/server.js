@@ -442,14 +442,22 @@ function renderLista() {
       if (!c.capa) html += '<span class="pill" style="background:rgba(231,76,60,.1);color:#e74c3c;border-color:rgba(231,76,60,.2)">Sem capa</span>';
       html += '  </div>';
       html += '  <div class="item__actions">';
-      html += '    <button class="btn btn--ghost btn--sm" onclick="editarCurso(\'' + esc(c.id) + '\')">Editar</button>';
-      html += '    <button class="btn btn--danger btn--sm" onclick="excluirCurso(\'' + esc(c.id) + '\')">Excluir</button>';
+      html += '    <button class="btn btn--ghost btn--sm" data-editar="' + esc(c.id) + '">Editar</button>';
+      html += '    <button class="btn btn--danger btn--sm" data-excluir="' + esc(c.id) + '">Excluir</button>';
       html += '  </div>';
       html += '</div>';
     });
     html += '</div>';
   });
   el.innerHTML = html;
+
+  // Event delegation para botoes
+  el.querySelectorAll('[data-editar]').forEach(btn => {
+    btn.addEventListener('click', () => editarCurso(btn.dataset.editar));
+  });
+  el.querySelectorAll('[data-excluir]').forEach(btn => {
+    btn.addEventListener('click', () => excluirCurso(btn.dataset.excluir));
+  });
 }
 
 // ── CRUD ──
