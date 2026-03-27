@@ -429,9 +429,10 @@ function renderLista() {
     html += '<div class="grupo">';
     html += '<h3 class="grupo__titulo">' + esc(cat) + ' (' + grupos[cat].length + ')</h3>';
     grupos[cat].forEach(c => {
+      const initials = (c.nome||'XX').substring(0,2).toUpperCase();
       const thumb = c.capa
-        ? '<img src="https://uninovare.com.br/' + esc(c.capa) + '" style="width:40px;height:40px;border-radius:8px;object-fit:cover;border:1px solid var(--border)" onerror="this.outerHTML=placeholderThumb(\\''+esc((c.nome||'').substring(0,2).toUpperCase())+'\\');">'
-        : '<div style="width:40px;height:40px;border-radius:8px;background:linear-gradient(135deg,rgba(58,125,68,.15),rgba(86,124,141,.2));display:grid;place-items:center;font-family:Baloo 2,sans-serif;font-weight:800;font-size:.7rem;color:rgba(31,42,46,.35);border:1px solid var(--border)">' + esc((c.nome||'').substring(0,2).toUpperCase()) + '</div>';
+        ? '<img src="https://uninovare.com.br/' + esc(c.capa) + '" style="width:40px;height:40px;border-radius:8px;object-fit:cover;border:1px solid rgba(31,42,46,.1)">'
+        : '<div style="width:40px;height:40px;border-radius:8px;background:linear-gradient(135deg,rgba(58,125,68,.15),rgba(86,124,141,.2));display:grid;place-items:center;font-weight:800;font-size:.7rem;color:rgba(31,42,46,.35);border:1px solid rgba(31,42,46,.1)">' + initials + '</div>';
       html += '<div class="item">';
       html += '  <div class="item__info">';
       html += '    ' + thumb;
@@ -516,7 +517,7 @@ document.getElementById('cursoForm').addEventListener('submit', async (e) => {
     linkCadastro: document.getElementById('f-link').value
   };
 
-  const r = await fetch(API + '/api/cursos', {
+  const r = await fetch('/api/cursos', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(curso)
@@ -535,7 +536,7 @@ document.getElementById('cursoForm').addEventListener('submit', async (e) => {
 async function excluirCurso(id) {
   const c = cursos.find(x => x.id === id);
   if (!confirm('Excluir "' + (c ? c.nome : id) + '"?')) return;
-  const r = await fetch(API + '/api/cursos/' + id, { method: 'DELETE' });
+  const r = await fetch('/api/cursos/' + id, { method: 'DELETE' });
   if (r.ok) { toast('Curso excluído.'); carregarCursos(); }
   else toast('Erro ao excluir.', true);
 }
