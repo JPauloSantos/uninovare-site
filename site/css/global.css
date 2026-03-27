@@ -268,6 +268,10 @@ h4 { font-size: 1.1rem; }
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
 }
+.section--fullwidth .carousel__track {
+  padding-left: max(calc((100vw - var(--container)) / 2), var(--gutter));
+  padding-right: 20px;
+}
 
 .section__header {
   margin-bottom: 32px;
