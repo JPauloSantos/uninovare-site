@@ -17,13 +17,19 @@ const ADMIN_USER = 'admin';
 const ADMIN_PASS = 'uninovare2026';
 
 // Middleware
+app.set('trust proxy', 1);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(session({
-  secret: crypto.randomBytes(32).toString('hex'),
+  secret: 'uninovare-admin-secret-2026-x7k9m',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: 4 * 60 * 60 * 1000 } // 4 horas
+  cookie: {
+    maxAge: 4 * 60 * 60 * 1000,
+    path: '/',
+    httpOnly: true,
+    sameSite: 'lax'
+  }
 }));
 
 // Auth middleware
@@ -390,9 +396,15 @@ let cursos = [];
 carregarCursos();
 
 async function carregarCursos() {
-  const r = await fetch(API + '/api/cursos');
-  cursos = await r.json();
-  renderLista();
+  try {
+    const r = await fetch('/api/cursos', { credentials: 'same-origin' });
+    if (r.status === 401) { window.location = '/admin/login'; return; }
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    cursos = await r.json();
+    renderLista();
+  } catch(e) {
+    document.getElementById('lista').innerHTML = '<div class="vazio"><p>Erro ao carregar cursos: ' + e.message + '</p></div>';
+  }
 }
 
 function renderLista() {
@@ -417,11 +429,16 @@ function renderLista() {
     html += '<div class="grupo">';
     html += '<h3 class="grupo__titulo">' + esc(cat) + ' (' + grupos[cat].length + ')</h3>';
     grupos[cat].forEach(c => {
+      const thumb = c.capa
+        ? '<img src="https://uninovare.com.br/' + esc(c.capa) + '" style="width:40px;height:40px;border-radius:8px;object-fit:cover;border:1px solid var(--border)" onerror="this.outerHTML=placeholderThumb(\\''+esc((c.nome||'').substring(0,2).toUpperCase())+'\\');">'
+        : '<div style="width:40px;height:40px;border-radius:8px;background:linear-gradient(135deg,rgba(58,125,68,.15),rgba(86,124,141,.2));display:grid;place-items:center;font-family:Baloo 2,sans-serif;font-weight:800;font-size:.7rem;color:rgba(31,42,46,.35);border:1px solid var(--border)">' + esc((c.nome||'').substring(0,2).toUpperCase()) + '</div>';
       html += '<div class="item">';
       html += '  <div class="item__info">';
+      html += '    ' + thumb;
       html += '    <span class="item__nome">' + esc(c.nome) + '</span>';
       html += '    <span class="pill pill--cat">' + esc(c.nivel || '') + '</span>';
       if (c.destaque) html += '<span class="pill pill--destaque">Destaque</span>';
+      if (!c.capa) html += '<span class="pill" style="background:rgba(231,76,60,.1);color:#e74c3c;border-color:rgba(231,76,60,.2)">Sem capa</span>';
       html += '  </div>';
       html += '  <div class="item__actions">';
       html += '    <button class="btn btn--ghost btn--sm" onclick="editarCurso(\'' + esc(c.id) + '\')">Editar</button>';
