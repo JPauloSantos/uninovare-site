@@ -164,23 +164,31 @@
   <main>
 
     <!-- ══════════════════════════════════════════════════════════
-         HERO SECTION — Banner + Apresentação
+         1. BANNER — Full width, centralizado no topo
          ══════════════════════════════════════════════════════════ -->
-    <section class="section hero" id="inicio" style="padding-top:24px;">
-      <div class="container hero__grid">
-
-        <!-- COLUNA ESQUERDA — Banner + Texto -->
-        <div class="hero__text">
-          <!-- Banner do curso integrado -->
-          <div class="heroBanner">
-            <img src="assets/banners/banner-npp.png" alt="Cursos de pós-graduação UNINOVARE" class="heroBanner__img" loading="eager">
-            <div class="heroBanner__label">
+    <section class="heroBanner" aria-label="Banner principal">
+      <div class="container">
+        <div class="heroBanner__frame">
+          <img src="assets/banners/banner-npp.png" alt="Cursos de pós-graduação UNINOVARE" class="heroBanner__img" loading="eager">
+          <div class="heroBanner__bar">
+            <div>
               <strong>CONHEÇA NOSSOS CURSOS DE PÓS-GRADUAÇÕES</strong>
               <span>Se você busca crescimento profissional e novas oportunidades, a UNINOVARE tem um convite especial para você.</span>
             </div>
+            <a href="https://wa.me/558396865555?text=Olá, vim pelo site da UNINOVARE e quero mais informações." target="_blank" rel="noopener noreferrer" class="btn btn--primary">Garantir minha vaga</a>
           </div>
+        </div>
+      </div>
+    </section>
 
-          <p class="kicker" style="margin-top:28px;">Treinamento &bull; Cursos &bull; Consultoria</p>
+    <!-- ══════════════════════════════════════════════════════════
+         2. HERO — Texto à esquerda, Card UNINOVARE à direita
+         ══════════════════════════════════════════════════════════ -->
+    <section class="section hero reveal" id="inicio">
+      <div class="container hero__grid">
+
+        <div class="hero__text">
+          <p class="kicker">Treinamento &bull; Cursos &bull; Consultoria</p>
           <h1>Conectando saberes, <span class="accent">inspirando o futuro</span>.</h1>
           <p class="lead">
             A <strong>UNINOVARE</strong> é uma empresa de soluções educacionais sediada em <strong>Campina Grande, PB</strong>, que atua na gestão de pós-graduações lato sensu, treinamentos corporativos, cursos livres e consultoria acadêmica. Nosso compromisso é transformar conhecimento em crescimento profissional, com certificação por instituições credenciadas pelo MEC.
@@ -191,7 +199,6 @@
           </div>
         </div>
 
-        <!-- COLUNA DIREITA — Card UNINOVARE (estilo original) -->
         <div class="hero__visual">
           <div class="heroLogo">
             <img src="assets/logos/logo-vertical.jpg" alt="UNINOVARE — Conectando saberes, inspirando o futuro" loading="eager">

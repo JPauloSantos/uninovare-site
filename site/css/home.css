@@ -4,18 +4,21 @@
    ══════════════════════════════════════════════════════════════ */
 
 
-/* ── 1. Hero Banner Integrado (colado no texto) ── */
+/* ── 1. Banner Hero — Full width, topo da página ── */
 
 .heroBanner {
+  padding: 18px 0 0;
+}
+
+.heroBanner__frame {
   border-radius: var(--radius-xl);
   overflow: hidden;
   border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-  margin-bottom: 8px;
+  box-shadow: var(--shadow-lg);
   transition: box-shadow .3s ease;
 }
-.heroBanner:hover {
-  box-shadow: var(--shadow-lg);
+.heroBanner__frame:hover {
+  box-shadow: 0 28px 60px rgba(31,42,46,.16);
 }
 
 .heroBanner__img {
@@ -23,17 +26,21 @@
   height: auto;
   display: block;
   object-fit: cover;
-  max-height: 360px;
 }
 
-.heroBanner__label {
-  padding: 14px 20px;
-  background: rgba(255,255,255,.90);
+.heroBanner__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 16px 24px;
+  background: rgba(255,255,255,.92);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-top: 1px solid var(--border);
 }
-.heroBanner__label strong {
+.heroBanner__bar strong {
   display: block;
   font-family: "Baloo 2", system-ui;
   font-weight: 800;
@@ -41,7 +48,7 @@
   color: var(--ink);
   margin-bottom: 2px;
 }
-.heroBanner__label span {
+.heroBanner__bar span {
   font-size: .86rem;
   color: var(--ink-soft);
   line-height: 1.5;
@@ -359,9 +366,14 @@
 }
 
 @media (max-width: 740px) {
-  .bannerHero__cta {
+  .heroBanner__bar {
     flex-direction: column;
     text-align: center;
+    padding: 14px 18px;
+  }
+  .heroBanner__bar .btn {
+    width: 100%;
+    justify-content: center;
   }
 
   .cursoCard {
