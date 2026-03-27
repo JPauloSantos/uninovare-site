@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>UNINOVARE - Documentacao Tecnica v2.0</title>
+<style>
+  @page { margin: 20mm; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.6;
+    color: #1f2a2e;
+    max-width: 210mm;
+    margin: 0 auto;
+    padding: 20px 30px;
+  }
+  h1 {
+    color: #3A7D44;
+    font-size: 22pt;
+    border-bottom: 3px solid #3A7D44;
+    padding-bottom: 8px;
+    margin-top: 30px;
+  }
+  h2 {
+    color: #3A7D44;
+    font-size: 16pt;
+    border-bottom: 2px solid #d4e8d7;
+    padding-bottom: 6px;
+    margin-top: 28px;
+    page-break-after: avoid;
+  }
+  h3 {
+    color: #2d6335;
+    font-size: 13pt;
+    margin-top: 20px;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 12px 0;
+    font-size: 10pt;
+  }
+  th, td {
+    border: 1px solid #d0d0d0;
+    padding: 8px 10px;
+    text-align: left;
+  }
+  th {
+    background: #3A7D44;
+    color: white;
+    font-weight: 600;
+  }
+  tr:nth-child(even) {
+    background: #f7f5f0;
+  }
+  code {
+    background: #f0ede6;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10pt;
+    font-family: 'Consolas', 'Courier New', monospace;
+  }
+  pre {
+    background: #1f2a2e;
+    color: #e8e6e0;
+    padding: 14px 18px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 9.5pt;
+    line-height: 1.5;
+  }
+  pre code {
+    background: none;
+    color: inherit;
+    padding: 0;
+  }
+  hr {
+    border: none;
+    border-top: 2px solid #d4e8d7;
+    margin: 24px 0;
+  }
+  strong { color: #1f2a2e; }
+  a { color: #3A7D44; }
+  ul, ol { padding-left: 20px; }
+  li { margin-bottom: 4px; }
+  .header {
+    text-align: center;
+    padding: 20px 0 10px;
+    border-bottom: 3px solid #3A7D44;
+    margin-bottom: 20px;
+  }
+  .header h1 { border: none; margin: 0; font-size: 26pt; }
+  .header p { color: #666; margin: 4px 0 0; }
+  @media print {
+    body { padding: 0; }
+    pre { page-break-inside: avoid; }
+    h2, h3 { page-break-after: avoid; }
+    table { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>UNINOVARE</h1>
+  <p>Documentacao Tecnica Completa &mdash; v2.0 &mdash; Marco 2026</p>
+</div>
+<h1 id="uninovare-documentacao-tecnica-completa-v20">UNINOVARE — Documentacao Tecnica Completa (v2.0)</h1>
+<p><strong>Data:</strong> Março de 2026
+<strong>Domínio:</strong> uninovare.com.br
+<strong>Repositório:</strong> github.com/JPauloSantos/uninovare-site (privado)
+<strong>VPS UNINOVARE:</strong> 187.77.33.115 (Hostinger KVM 2)
+<strong>VPS ESGP:</strong> 187.77.52.115 (outro VPS, não mexer)</p>
+<hr />
+<h2 id="sumario">SUMARIO</h2>
+<ol>
+<li><a href="#1-visao-geral">Visão Geral</a></li>
+<li><a href="#2-estrutura-de-arquivos">Estrutura de Arquivos</a></li>
+<li><a href="#3-como-o-site-foi-construido">Como o Site foi Construído</a></li>
+<li><a href="#4-onde-mexer-no-codigo">Onde Mexer no Código</a></li>
+<li><a href="#5-sistema-admin">Sistema Admin (Gestão de Cursos)</a></li>
+<li><a href="#6-seo-e-indexacao">SEO e Indexação</a></li>
+<li><a href="#7-infraestrutura-e-deploy">Infraestrutura e Deploy</a></li>
+<li><a href="#8-manutencao-e-troubleshooting">Manutenção e Troubleshooting</a></li>
+<li><a href="#9-credenciais-e-acessos">Credenciais e Acessos</a></li>
+<li><a href="#10-historico-de-versoes">Histórico de Versões</a></li>
+</ol>
+<hr />
+<h2 id="1-visao-geral">1. VISAO GERAL</h2>
+<p>O site da UNINOVARE é um site institucional multi-página para a empresa de treinamento, cursos e consultoria em Campina Grande/PB.</p>
+<h3 id="o-que-mudou-v10-v20">O que mudou (v1.0 → v2.0)</h3>
+<table>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th>v1.0 (anterior)</th>
+<th>v2.0 (atual)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Estrutura</td>
+<td>One-page (1 HTML)</td>
+<td>Multi-página (7 páginas + admin)</td>
+</tr>
+<tr>
+<td>Fontes</td>
+<td>Baloo 2 + Merriweather</td>
+<td>Baloo 2 + Open Sans</td>
+</tr>
+<tr>
+<td>Cursos</td>
+<td>Lista estática no HTML</td>
+<td>Sistema dinâmico via JSON + Admin web</td>
+</tr>
+<tr>
+<td>Administração</td>
+<td>Edição manual do HTML</td>
+<td>Painel web com login em uninovare.com.br/admin</td>
+</tr>
+<tr>
+<td>SEO</td>
+<td>Básico</td>
+<td>Completo (robots.txt, sitemap, JSON-LD, Open Graph)</td>
+</tr>
+<tr>
+<td>Navegação</td>
+<td>Âncoras internas</td>
+<td>Páginas separadas + Portal Acadêmico</td>
+</tr>
+<tr>
+<td>Deploy</td>
+<td>FileZilla manual</td>
+<td>Script Python automatizado</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tecnologias">Tecnologias</h3>
+<table>
+<thead>
+<tr>
+<th>Tecnologia</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTML5</td>
+<td>Estrutura semântica</td>
+</tr>
+<tr>
+<td>CSS3</td>
+<td>Estilos, layout responsivo</td>
+</tr>
+<tr>
+<td>JavaScript (Vanilla)</td>
+<td>Interatividade no frontend</td>
+</tr>
+<tr>
+<td>Node.js + Express</td>
+<td>Backend do painel admin</td>
+</tr>
+<tr>
+<td>JSON</td>
+<td>Banco de dados dos cursos</td>
+</tr>
+<tr>
+<td>pm2</td>
+<td>Gerenciador de processos (admin)</td>
+</tr>
+<tr>
+<td>Nginx</td>
+<td>Servidor web + proxy reverso</td>
+</tr>
+<tr>
+<td>Let's Encrypt</td>
+<td>Certificado SSL (HTTPS)</td>
+</tr>
+<tr>
+<td>Google Fonts</td>
+<td>Baloo 2 (títulos) + Open Sans (corpo)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-estrutura-de-arquivos">2. ESTRUTURA DE ARQUIVOS</h2>
+<h3 id="no-seu-computador-repositorio-git">No seu computador (repositório Git)</h3>
+<pre><code>PROJETO SITE UNINOVARE/
+├── .gitignore
+├── DOCS.md                    ← ESTE ARQUIVO
+├── GUIA-PASSO-A-PASSO.md     ← Guia de como o site foi construído
+├── deploy.py                  ← Script de deploy automático
+│
+├── site/                      ← ARQUIVOS DO SITE (vão para o servidor)
+│   ├── index.html             ← Página Home
+│   ├── quem-somos.html        ← Quem Somos
+│   ├── cursos.html            ← Listagem de cursos
+│   ├── curso.html             ← Ficha individual do curso
+│   ├── solucoes.html          ← Soluções Educacionais
+│   ├── contato.html           ← Contato
+│   ├── admin.html             ← (legado, não usado mais)
+│   ├── robots.txt             ← Regras para robôs de busca
+│   ├── sitemap.xml            ← Mapa do site
+│   ├── css/
+│   │   ├── global.css         ← Estilos globais (todos usam)
+│   │   ├── home.css           ← Estilos só da Home
+│   │   ├── cursos.css         ← Estilos de listagem/ficha
+│   │   ├── quem-somos.css     ← Estilos Quem Somos
+│   │   ├── solucoes.css       ← Estilos Soluções
+│   │   └── admin.css          ← (legado)
+│   ├── js/
+│   │   ├── global.js          ← Menu, scroll reveal, form WhatsApp
+│   │   ├── carousel.js        ← Carrossel reutilizável
+│   │   ├── cursos.js          ← Listagem com filtro (cursos.html)
+│   │   ├── curso-detalhe.js   ← Ficha individual (curso.html)
+│   │   └── admin.js           ← (legado)
+│   ├── data/
+│   │   └── cursos.json        ← BANCO DE DADOS DOS CURSOS
+│   └── assets/
+│       ├── logos/             ← logo-horizontal.jpg, logo-vertical.jpg, logo-circular.jpg
+│       ├── banners/           ← banner-npp.png (banner do topo)
+│       ├── cursos/            ← Capas dos cursos (aba.jpg, tcc.jpg, etc.)
+│       ├── professores/       ← Fotos dos professores (a adicionar)
+│       ├── equipe/            ← ceo-milena.jpg
+│       └── gallery/           ← turma-01.jpg a turma-12.jpg
+│
+├── admin-server/              ← BACKEND DO PAINEL ADMIN
+│   ├── package.json
+│   └── server.js              ← Servidor Express (login, CRUD, upload)
+│
+└── uninovare-site-working-no-identidade/  ← Site antigo (v1.0, referência)
+</code></pre>
+<h3 id="no-servidor-vps-1877733115">No servidor VPS (187.77.33.115)</h3>
+<pre><code>/var/www/uninovare/            ← Site público (conteúdo da pasta site/)
+/var/www/uninovare-admin/      ← Backend admin (conteúdo de admin-server/)
+/var/www/uninovare-backup-*.tar.gz  ← Backups do site anterior
+/etc/nginx/sites-available/uninovare  ← Config do Nginx
+/etc/letsencrypt/live/uninovare.com.br/  ← Certificados SSL
+</code></pre>
+<hr />
+<h2 id="3-como-o-site-foi-construido">3. COMO O SITE FOI CONSTRUIDO</h2>
+<h3 id="passo-1-fundacao-css-global-tipografia">Passo 1 — Fundação (CSS Global + Tipografia)</h3>
+<p><strong>Arquivo:</strong> <code>site/css/global.css</code></p>
+<p>Criamos o CSS global com:
+- <strong>Variáveis CSS</strong> (<code>:root</code>) para cores, sombras, border-radius
+- <strong>Paleta:</strong> <code>--primary: #3A7D44</code> (verde), <code>--accent: #FFC857</code> (amarelo), <code>--sand: #F3E9D2</code> (fundo), <code>--ink: #1f2a2e</code> (texto)
+- <strong>Tipografia:</strong> Baloo 2 para títulos, Open Sans para corpo
+- <strong>Componentes reutilizáveis:</strong> <code>.btn</code>, <code>.card</code>, <code>.pill</code>, <code>.section</code>, <code>.grid</code>, <code>.carousel</code>, <code>.gallery</code>, <code>.form</code>
+- <strong>Responsivo:</strong> breakpoints em 900px, 740px, 480px
+- <strong>Acessibilidade:</strong> skip link, focus states, prefers-reduced-motion</p>
+<p><strong>Se quiser mudar cores:</strong> edite as variáveis no <code>:root</code> de <code>global.css</code> (linhas 1-20).
+<strong>Se quiser mudar fontes:</strong> edite o import do Google Fonts no <code>&lt;head&gt;</code> de cada HTML e o <code>font-family</code> no <code>global.css</code>.</p>
+<h3 id="passo-2-navegacao-header-compartilhado">Passo 2 — Navegação (Header compartilhado)</h3>
+<p><strong>Onde:</strong> Cada arquivo HTML contém o header no topo (não é componente, é copiado).</p>
+<p>A navegação tem:
+- Logo (link para index.html)
+- Ícones sociais (Instagram, LinkedIn, Facebook)
+- Links: Home, Quem Somos, Nossos Cursos, Soluções Educacionais, Contato
+- Botão Portal Acadêmico (link externo para SIAF360)
+- Menu hamburguer no mobile</p>
+<p><strong>Se quiser adicionar um link no menu:</strong> edite o <code>&lt;nav id="menu"&gt;</code> em TODOS os 6 HTMLs.
+<strong>Se quiser mudar o link do Portal:</strong> busque <code>siaf360</code> nos HTMLs.</p>
+<h3 id="passo-3-pagina-home-indexhtml">Passo 3 — Página Home (index.html)</h3>
+<p><strong>Arquivos:</strong> <code>site/index.html</code> + <code>site/css/home.css</code></p>
+<p>Seções da Home (na ordem):
+1. <strong>Banner</strong> — Imagem full-width no topo (<code>assets/banners/banner-npp.png</code>), barra com texto + botão CTA
+2. <strong>Hero</strong> — Grid 2 colunas: texto à esquerda, card UNINOVARE à direita com badge "Campina Grande"
+3. <strong>Por que escolher</strong> — Grid 4 cards com ícones SVG e diferenciais
+4. <strong>Cursos em destaque</strong> — Carrossel horizontal com 7 cursos hardcoded no HTML
+5. <strong>Depoimentos</strong> — Grid 2 colunas com 5 depoimentos
+6. <strong>Galeria</strong> — Grid de 12 fotos de turmas
+7. <strong>Footer</strong> — Logo, links, contato, copyright</p>
+<p><strong>Se quiser trocar o banner:</strong> substitua <code>assets/banners/banner-npp.png</code> e edite o texto na <code>&lt;div class="heroBanner__bar"&gt;</code>.
+<strong>Se quiser mudar cursos do carrossel:</strong> edite os <code>&lt;article&gt;</code> dentro de <code>#cursosTrack</code> no <code>index.html</code>.
+<strong>Se quiser mudar depoimentos:</strong> edite os <code>&lt;article&gt;</code> na seção <code>#depoimentos</code>.</p>
+<h3 id="passo-4-pagina-quem-somos-quem-somoshtml">Passo 4 — Página Quem Somos (quem-somos.html)</h3>
+<p><strong>Arquivos:</strong> <code>site/quem-somos.html</code> + <code>site/css/quem-somos.css</code></p>
+<p>Seções:
+1. Hero com apresentação institucional
+2. Missão, Visão e Valores (3 cards)
+3. Equipe (Milena, Lícea, Myrna) — Lícea e Myrna têm placeholder, substituir por fotos reais
+4. Parceiros institucionais</p>
+<p><strong>Se quiser adicionar membro à equipe:</strong> copie um <code>&lt;article class="card card--equipe"&gt;</code> e edite nome/cargo/foto.
+<strong>Se quiser mudar Missão/Visão/Valores:</strong> edite o texto diretamente nos cards <code>.mvv-card</code>.</p>
+<h3 id="passo-5-sistema-de-cursos-cursosjson-cursoshtml-cursohtml">Passo 5 — Sistema de Cursos (cursos.json + cursos.html + curso.html)</h3>
+<p><strong>Banco de dados:</strong> <code>site/data/cursos.json</code>
+<strong>Listagem:</strong> <code>site/cursos.html</code> + <code>site/js/cursos.js</code>
+<strong>Ficha individual:</strong> <code>site/curso.html</code> + <code>site/js/curso-detalhe.js</code>
+<strong>CSS:</strong> <code>site/css/cursos.css</code></p>
+<p>Cada curso no JSON tem esta estrutura:</p>
+<pre><code class="language-json">{
+  &quot;id&quot;: &quot;slug-unico&quot;,
+  &quot;nome&quot;: &quot;Nome do Curso&quot;,
+  &quot;categoria&quot;: &quot;Psicologia|Educação|Saúde|Gestão|Comunicação&quot;,
+  &quot;nivel&quot;: &quot;Especialização|MBA|Mestrado|Doutorado&quot;,
+  &quot;capa&quot;: &quot;assets/cursos/arquivo.jpg&quot;,
+  &quot;descricao&quot;: &quot;Descrição completa&quot;,
+  &quot;diferencial&quot;: &quot;Frase curta&quot;,
+  &quot;objetivo&quot;: &quot;Objetivo do curso&quot;,
+  &quot;publicoAlvo&quot;: &quot;Para quem é&quot;,
+  &quot;cargaHoraria&quot;: &quot;360 h/a&quot;,
+  &quot;duracao&quot;: &quot;15 meses&quot;,
+  &quot;coordenador&quot;: { &quot;nome&quot;: &quot;Nome&quot;, &quot;fone&quot;: &quot;&quot; },
+  &quot;professores&quot;: [
+    { &quot;foto&quot;: &quot;&quot;, &quot;nome&quot;: &quot;&quot;, &quot;miniCurriculo&quot;: &quot;&quot;, &quot;titulacao&quot;: &quot;&quot; }
+  ],
+  &quot;matrizCurricular&quot;: &quot;&quot;,
+  &quot;valor&quot;: &quot;&quot;,
+  &quot;contatoInscricao&quot;: &quot;&quot;,
+  &quot;linkCadastro&quot;: &quot;&quot;,
+  &quot;destaque&quot;: true
+}
+</code></pre>
+<p><strong>Regra fundamental:</strong> Campos vazios (<code>""</code>, <code>[]</code>) NÃO aparecem na ficha do curso. Preencha conforme necessário.</p>
+<p><strong>Se quiser adicionar/editar cursos:</strong> Use o painel admin (uninovare.com.br/admin) — é a forma mais fácil.
+<strong>Se quiser editar manualmente:</strong> Edite <code>site/data/cursos.json</code> e faça deploy.</p>
+<h3 id="passo-6-solucoes-educacionais-solucoeshtml">Passo 6 — Soluções Educacionais (solucoes.html)</h3>
+<p><strong>Arquivos:</strong> <code>site/solucoes.html</code> + <code>site/css/solucoes.css</code></p>
+<p>Cards de serviços:
+- Pós-Graduações Presenciais (link para cursos.html)
+- Cursos de Formação e Treinamentos
+- Mestrados e Doutorados (Programas Internacionais)
+- Tecnólogo Superior EAD (Em breve)
+- Graduações EAD (Em breve)</p>
+<p><strong>Se quiser ativar EAD/Graduações:</strong> remova a classe disabled do botão e mude o texto "Em breve".</p>
+<h3 id="passo-7-contato-contatohtml">Passo 7 — Contato (contato.html)</h3>
+<p><strong>Arquivo:</strong> <code>site/contato.html</code></p>
+<p>Formulário que envia para WhatsApp (sem backend). O JS está em <code>global.js</code> (busca por <code>#contactForm</code>).</p>
+<p><strong>Se quiser mudar o número do WhatsApp:</strong> busque <code>558396865555</code> em TODOS os arquivos HTML e JS.</p>
+<h3 id="passo-8-painel-admin-admin-server">Passo 8 — Painel Admin (admin-server/)</h3>
+<p><strong>Arquivo principal:</strong> <code>admin-server/server.js</code></p>
+<p>Backend Express.js que:
+- Roda na porta 3055
+- Login com sessão
+- API REST para cursos (GET/POST/DELETE)
+- Edita <code>cursos.json</code> diretamente no servidor
+- Acessível em uninovare.com.br/admin</p>
+<p>Detalhes completos na seção 5.</p>
+<h3 id="passo-9-seo">Passo 9 — SEO</h3>
+<p>Em cada HTML:
+- Meta tags (description, keywords, author, robots)
+- Open Graph (Facebook, WhatsApp, LinkedIn)
+- Twitter Cards
+- JSON-LD (dados estruturados para Google)
+- Canonical URL</p>
+<p>Arquivos globais: <code>robots.txt</code> e <code>sitemap.xml</code></p>
+<h3 id="passo-10-deploy">Passo 10 — Deploy</h3>
+<p>O deploy envia os arquivos de <code>site/</code> para <code>/var/www/uninovare/</code> no VPS via SFTP (script <code>deploy.py</code>).</p>
+<hr />
+<h2 id="4-onde-mexer-no-codigo">4. ONDE MEXER NO CODIGO</h2>
+<h3 id="guia-rapido-por-tarefa">Guia rápido por tarefa</h3>
+<table>
+<thead>
+<tr>
+<th>Quero...</th>
+<th>Arquivo(s) a editar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mudar cores do site</td>
+<td><code>site/css/global.css</code> (variáveis <code>:root</code>)</td>
+</tr>
+<tr>
+<td>Mudar fontes</td>
+<td><code>site/css/global.css</code> + <code>&lt;head&gt;</code> dos HTMLs</td>
+</tr>
+<tr>
+<td>Trocar banner da home</td>
+<td><code>site/assets/banners/</code> + <code>site/index.html</code> (seção heroBanner)</td>
+</tr>
+<tr>
+<td>Trocar logo</td>
+<td><code>site/assets/logos/</code> (manter mesmo nome)</td>
+</tr>
+<tr>
+<td>Editar texto da home</td>
+<td><code>site/index.html</code></td>
+</tr>
+<tr>
+<td>Editar Quem Somos</td>
+<td><code>site/quem-somos.html</code></td>
+</tr>
+<tr>
+<td>Editar Missão/Visão/Valores</td>
+<td><code>site/quem-somos.html</code> (seção mvv)</td>
+</tr>
+<tr>
+<td>Adicionar membro à equipe</td>
+<td><code>site/quem-somos.html</code> (copiar card equipe)</td>
+</tr>
+<tr>
+<td>Adicionar foto de equipe</td>
+<td><code>site/assets/equipe/</code> + editar HTML</td>
+</tr>
+<tr>
+<td>Adicionar/editar curso</td>
+<td><strong>Usar o admin:</strong> uninovare.com.br/admin</td>
+</tr>
+<tr>
+<td>Editar curso manualmente</td>
+<td><code>site/data/cursos.json</code></td>
+</tr>
+<tr>
+<td>Mudar cursos do carrossel (home)</td>
+<td><code>site/index.html</code> (seção #cursosTrack)</td>
+</tr>
+<tr>
+<td>Adicionar depoimento</td>
+<td><code>site/index.html</code> (seção #depoimentos)</td>
+</tr>
+<tr>
+<td>Trocar fotos da galeria</td>
+<td><code>site/assets/gallery/</code> (manter nomes turma-XX.jpg)</td>
+</tr>
+<tr>
+<td>Adicionar foto à galeria</td>
+<td><code>site/assets/gallery/</code> + editar <code>index.html</code></td>
+</tr>
+<tr>
+<td>Mudar número WhatsApp</td>
+<td>Buscar <code>558396865555</code> em todos os arquivos</td>
+</tr>
+<tr>
+<td>Mudar endereço</td>
+<td>Buscar "Cirne Center" nos HTMLs</td>
+</tr>
+<tr>
+<td>Mudar link Portal Acadêmico</td>
+<td>Buscar <code>siaf360</code> nos HTMLs</td>
+</tr>
+<tr>
+<td>Ativar EAD/Graduações</td>
+<td><code>site/solucoes.html</code> (remover disabled)</td>
+</tr>
+<tr>
+<td>Mudar credenciais do admin</td>
+<td><code>admin-server/server.js</code> (ADMIN_USER, ADMIN_PASS)</td>
+</tr>
+<tr>
+<td>Adicionar página nova</td>
+<td>Criar HTML, copiar header/footer de outro, add no nav</td>
+</tr>
+</tbody>
+</table>
+<h3 id="estrutura-css-o-que-cada-arquivo-faz">Estrutura CSS (o que cada arquivo faz)</h3>
+<table>
+<thead>
+<tr>
+<th>Arquivo</th>
+<th>Escopo</th>
+<th>O que contém</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>global.css</code></td>
+<td>Todas as páginas</td>
+<td>Reset, variáveis, tipografia, botões, cards, pills, grids, carrossel, galeria, formulários, footer, responsivo</td>
+</tr>
+<tr>
+<td><code>home.css</code></td>
+<td>Só index.html</td>
+<td>Banner hero, hero grid, seção "por que escolher", depoimentos, galeria estilo álbum</td>
+</tr>
+<tr>
+<td><code>cursos.css</code></td>
+<td>cursos.html + curso.html</td>
+<td>Filtros, cards de curso, ficha detalhada, professores</td>
+</tr>
+<tr>
+<td><code>quem-somos.css</code></td>
+<td>quem-somos.html</td>
+<td>Missão/Visão/Valores, equipe, parceiros</td>
+</tr>
+<tr>
+<td><code>solucoes.css</code></td>
+<td>solucoes.html</td>
+<td>Cards de serviços, badges "em breve"</td>
+</tr>
+</tbody>
+</table>
+<h3 id="estrutura-js-o-que-cada-arquivo-faz">Estrutura JS (o que cada arquivo faz)</h3>
+<table>
+<thead>
+<tr>
+<th>Arquivo</th>
+<th>Escopo</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>global.js</code></td>
+<td>Todas as páginas</td>
+<td>Menu mobile, active nav link, scroll reveal, form WhatsApp, ano no footer</td>
+</tr>
+<tr>
+<td><code>carousel.js</code></td>
+<td>Páginas com carrossel</td>
+<td>Fábrica <code>makeCarousel()</code> — auto-play, dots, navegação</td>
+</tr>
+<tr>
+<td><code>cursos.js</code></td>
+<td>cursos.html</td>
+<td>Fetch cursos.json, renderiza grid, filtro por categoria</td>
+</tr>
+<tr>
+<td><code>curso-detalhe.js</code></td>
+<td>curso.html</td>
+<td>Fetch cursos.json, renderiza ficha com campos condicionais</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-sistema-admin">5. SISTEMA ADMIN</h2>
+<h3 id="acesso">Acesso</h3>
+<p><strong>URL:</strong> https://uninovare.com.br/admin
+<strong>Usuário:</strong> admin
+<strong>Senha:</strong> uninovare2026</p>
+<h3 id="como-funciona">Como funciona</h3>
+<ol>
+<li>O admin é um servidor Node.js/Express rodando na porta 3055</li>
+<li>O Nginx faz proxy: <code>/admin</code> e <code>/api</code> → porta 3055</li>
+<li>Login cria uma sessão (cookie) que dura 4 horas</li>
+<li>As operações leem/escrevem diretamente no <code>/var/www/uninovare/data/cursos.json</code></li>
+<li>Alterações refletem imediatamente no site público</li>
+</ol>
+<h3 id="api-endpoints">API Endpoints</h3>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Rota</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td>/api/login</td>
+<td>Login (body: {usuario, senha})</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>/api/logout</td>
+<td>Logout</td>
+</tr>
+<tr>
+<td>GET</td>
+<td>/api/cursos</td>
+<td>Listar todos os cursos</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>/api/cursos</td>
+<td>Criar ou atualizar curso</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>/api/cursos/:id</td>
+<td>Excluir curso</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>/api/upload</td>
+<td>Upload de imagem</td>
+</tr>
+</tbody>
+</table>
+<h3 id="arquitetura">Arquitetura</h3>
+<pre><code>Browser → HTTPS → Nginx (443) → proxy_pass → Express (3055)
+                              → static files → /var/www/uninovare/
+</code></pre>
+<h3 id="mudar-credenciais">Mudar credenciais</h3>
+<p>Edite <code>admin-server/server.js</code>:</p>
+<pre><code class="language-javascript">const ADMIN_USER = 'admin';      // Linha 16
+const ADMIN_PASS = 'uninovare2026';  // Linha 17
+</code></pre>
+<p>Depois faça deploy do admin (enviar server.js e <code>pm2 restart uninovare-admin</code>).</p>
+<h3 id="reiniciar-o-admin">Reiniciar o admin</h3>
+<pre><code class="language-bash">ssh root@187.77.33.115
+pm2 restart uninovare-admin
+pm2 logs uninovare-admin
+</code></pre>
+<hr />
+<h2 id="6-seo-e-indexacao">6. SEO E INDEXACAO</h2>
+<h3 id="robotstxt">robots.txt</h3>
+<ul>
+<li>Permite indexação de todas as páginas</li>
+<li>Bloqueia <code>/admin</code></li>
+<li>Aponta para sitemap.xml</li>
+</ul>
+<h3 id="sitemapxml">sitemap.xml</h3>
+<ul>
+<li>6 páginas públicas com lastmod, changefreq e priority</li>
+</ul>
+<h3 id="meta-tags-todas-as-paginas">Meta Tags (todas as páginas)</h3>
+<ul>
+<li><code>description</code> — descrição única por página</li>
+<li><code>keywords</code> — palavras-chave</li>
+<li><code>canonical</code> — URL canônica</li>
+<li>Open Graph (og:title, og:description, og:image, og:url)</li>
+<li>Twitter Cards</li>
+<li>JSON-LD (Organization, EducationalOrganization, LocalBusiness, Course)</li>
+</ul>
+<h3 id="html-semantico">HTML Semântico</h3>
+<ul>
+<li><code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;article&gt;</code>, <code>&lt;nav&gt;</code>, <code>&lt;footer&gt;</code></li>
+<li>ARIA labels, roles, aria-expanded</li>
+<li><code>loading="lazy"</code> em imagens fora do viewport</li>
+<li><code>preconnect</code> para Google Fonts</li>
+</ul>
+<hr />
+<h2 id="7-infraestrutura-e-deploy">7. INFRAESTRUTURA E DEPLOY</h2>
+<h3 id="servidor">Servidor</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Valor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IP</td>
+<td>187.77.33.115</td>
+</tr>
+<tr>
+<td>SO</td>
+<td>Ubuntu 24.04 LTS</td>
+</tr>
+<tr>
+<td>Web Server</td>
+<td>Nginx 1.24</td>
+</tr>
+<tr>
+<td>SSL</td>
+<td>Let's Encrypt (renovação automática)</td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td>v20.20.1</td>
+</tr>
+<tr>
+<td>pm2</td>
+<td>Gerenciador de processos</td>
+</tr>
+<tr>
+<td>SSH</td>
+<td><code>ssh root@187.77.33.115</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="nginx-config">Nginx Config</h3>
+<p>Arquivo: <code>/etc/nginx/sites-available/uninovare</code></p>
+<pre><code class="language-nginx">server {
+    server_name uninovare.com.br www.uninovare.com.br;
+    root /var/www/uninovare;
+    index index.html;
+
+    # Admin panel → Node.js
+    location /admin { proxy_pass http://127.0.0.1:3055; ... }
+    location /api   { proxy_pass http://127.0.0.1:3055; ... }
+
+    # Site estático
+    location / { try_files $uri $uri/ =404; }
+
+    # SSL (Certbot)
+    listen 443 ssl;
+    ssl_certificate /etc/letsencrypt/live/uninovare.com.br/fullchain.pem;
+    ...
+}
+</code></pre>
+<h3 id="como-fazer-deploy-do-site">Como fazer deploy do SITE</h3>
+<p><strong>Opção 1 — Script automático:</strong></p>
+<pre><code class="language-bash">python deploy.py
+</code></pre>
+<p>(Envia <code>site/</code> para <code>/var/www/uninovare/</code> via SFTP)</p>
+<p><strong>Opção 2 — Manual via FileZilla:</strong>
+- Host: sftp://187.77.33.115
+- Usuário: root
+- Porta: 22
+- Enviar conteúdo de <code>site/</code> para <code>/var/www/uninovare/</code></p>
+<h3 id="como-fazer-deploy-do-admin">Como fazer deploy do ADMIN</h3>
+<pre><code class="language-bash"># No seu computador:
+scp admin-server/server.js root@187.77.33.115:/var/www/uninovare-admin/
+
+# No servidor:
+ssh root@187.77.33.115
+pm2 restart uninovare-admin
+</code></pre>
+<h3 id="processos-pm2">Processos pm2</h3>
+<pre><code class="language-bash">pm2 list                     # Ver processos
+pm2 restart uninovare-admin  # Reiniciar admin
+pm2 logs uninovare-admin     # Ver logs
+pm2 save                     # Salvar lista de processos
+</code></pre>
+<hr />
+<h2 id="8-manutencao-e-troubleshooting">8. MANUTENCAO E TROUBLESHOOTING</h2>
+<h3 id="checklist-mensal">Checklist mensal</h3>
+<ul>
+<li>[ ] Site acessível via HTTPS (https://uninovare.com.br)</li>
+<li>[ ] Certificado SSL válido (<code>certbot certificates</code>)</li>
+<li>[ ] Nginx rodando (<code>systemctl status nginx</code>)</li>
+<li>[ ] Admin rodando (<code>pm2 list</code>)</li>
+<li>[ ] Links do WhatsApp funcionando</li>
+<li>[ ] Banner atualizado</li>
+</ul>
+<h3 id="trocar-o-banner">Trocar o banner</h3>
+<ol>
+<li>Criar imagem (min 1200px largura, JPG ou PNG)</li>
+<li>Salvar em <code>site/assets/banners/</code> como <code>banner-NOME.png</code></li>
+<li>Editar <code>site/index.html</code> — trocar o <code>src</code> na tag <code>&lt;img&gt;</code> da seção <code>.heroBanner</code></li>
+<li>Editar o texto na <code>&lt;div class="heroBanner__bar"&gt;</code></li>
+<li>Fazer deploy</li>
+</ol>
+<h3 id="atualizar-fotos-da-galeria">Atualizar fotos da galeria</h3>
+<ol>
+<li>Salvar fotos como <code>turma-XX.jpg</code> em <code>site/assets/gallery/</code></li>
+<li>Fazer deploy (as fotos com mesmo nome são substituídas)</li>
+</ol>
+<h3 id="adicionar-foto-da-equipe">Adicionar foto da equipe</h3>
+<ol>
+<li>Salvar foto em <code>site/assets/equipe/</code> (ex: <code>licea-araujo.jpg</code>)</li>
+<li>Editar <code>site/quem-somos.html</code> — trocar o <code>&lt;div class="equipe__photo-placeholder"&gt;</code> por <code>&lt;img src="assets/equipe/licea-araujo.jpg"&gt;</code></li>
+<li>Fazer deploy</li>
+</ol>
+<h3 id="site-fora-do-ar">Site fora do ar</h3>
+<pre><code class="language-bash">ssh root@187.77.33.115
+systemctl status nginx      # Verificar Nginx
+systemctl restart nginx     # Reiniciar
+nginx -t                    # Testar config
+pm2 list                    # Verificar admin
+pm2 restart all             # Reiniciar tudo
+</code></pre>
+<h3 id="ssl-expirado">SSL expirado</h3>
+<pre><code class="language-bash">certbot certificates        # Verificar validade
+certbot renew               # Renovar
+systemctl reload nginx      # Aplicar
+</code></pre>
+<h3 id="admin-nao-funciona">Admin não funciona</h3>
+<pre><code class="language-bash">pm2 logs uninovare-admin --lines 30   # Ver erros
+pm2 restart uninovare-admin            # Reiniciar
+node /var/www/uninovare-admin/server.js  # Testar manual
+</code></pre>
+<hr />
+<h2 id="9-credenciais-e-acessos">9. CREDENCIAIS E ACESSOS</h2>
+<table>
+<thead>
+<tr>
+<th>Serviço</th>
+<th>Acesso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>VPS SSH</strong></td>
+<td><code>ssh root@187.77.33.115</code> / senha: (consultar)</td>
+</tr>
+<tr>
+<td><strong>Admin do Site</strong></td>
+<td>uninovare.com.br/admin / admin / uninovare2026</td>
+</tr>
+<tr>
+<td><strong>Portal Acadêmico</strong></td>
+<td>app.siaf360.com.br/login/uninovare</td>
+</tr>
+<tr>
+<td><strong>GitHub</strong></td>
+<td>github.com/JPauloSantos/uninovare-site (privado)</td>
+</tr>
+<tr>
+<td><strong>Hostinger</strong></td>
+<td>hpanel.hostinger.com / jpsisan@gmail.com</td>
+</tr>
+<tr>
+<td><strong>Registro.br</strong></td>
+<td>registro.br / MACSO1637</td>
+</tr>
+<tr>
+<td><strong>WhatsApp</strong></td>
+<td>(83) 9.9686-5555</td>
+</tr>
+<tr>
+<td><strong>Telefone</strong></td>
+<td>(83) 3099-5333</td>
+</tr>
+<tr>
+<td><strong>Instagram</strong></td>
+<td>@uninovare</td>
+</tr>
+<tr>
+<td><strong>LinkedIn</strong></td>
+<td>/company/uninovare</td>
+</tr>
+<tr>
+<td><strong>Endereço</strong></td>
+<td>Shopping Cirne Center, 2o andar, Centro, Campina Grande/PB</td>
+</tr>
+<tr>
+<td><strong>Domínio expira</strong></td>
+<td>15 de agosto de 2027</td>
+</tr>
+<tr>
+<td><strong>SSL expira</strong></td>
+<td>Renovação automática (Let's Encrypt)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="10-historico-de-versoes">10. HISTORICO DE VERSOES</h2>
+<table>
+<thead>
+<tr>
+<th>Versão</th>
+<th>Data</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1.0</td>
+<td>Mar 2026</td>
+<td>Site one-page original</td>
+</tr>
+<tr>
+<td>2.0</td>
+<td>27 Mar 2026</td>
+<td>Reestruturação completa: multi-página, sistema de cursos, admin web, SEO avançado</td>
+</tr>
+</tbody>
+</table>
+<h3 id="commits-principais">Commits principais</h3>
+<table>
+<thead>
+<tr>
+<th>Commit</th>
+<th>Descrição</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>c4ee029</code></td>
+<td>feat: reestruturação completa v2.0 (48 arquivos)</td>
+</tr>
+<tr>
+<td><code>e6d0fb4</code></td>
+<td>fix: bugs de consistência HTML/JS</td>
+</tr>
+<tr>
+<td><code>ff8b5e3</code></td>
+<td>fix: correções visuais hero + Portal Acadêmico</td>
+</tr>
+<tr>
+<td><code>822b9a2</code></td>
+<td>fix: banner full-width centralizado</td>
+</tr>
+<tr>
+<td><code>59e7bcb</code></td>
+<td>fix: banner ponta a ponta sem espaços</td>
+</tr>
+<tr>
+<td><code>e921941</code></td>
+<td>feat: carrossel full-width</td>
+</tr>
+<tr>
+<td><code>4e6ab38</code></td>
+<td>fix: cursos em destaque hardcoded no HTML</td>
+</tr>
+<tr>
+<td><code>7ac0ab3</code></td>
+<td>feat: sistema admin web Node.js/Express</td>
+</tr>
+<tr>
+<td><code>519aae5</code></td>
+<td>fix: SyntaxError no JS do admin</td>
+</tr>
+<tr>
+<td><code>4f52749</code></td>
+<td>fix: corrigir erro JS aspas escapadas no admin</td>
+</tr>
+<tr>
+<td><code>5195528</code></td>
+<td>fix: admin lista cursos (cookie path + thumbnails)</td>
+</tr>
+<tr>
+<td><code>721ffe0</code></td>
+<td>docs: documentação técnica completa</td>
+</tr>
+<tr>
+<td><code>cf5dcf1</code></td>
+<td>feat: busca/filtro de cursos + upload de capa no admin</td>
+</tr>
+<tr>
+<td><code>4ebc7d4</code></td>
+<td>fix: botão remover imagem + selecionar imagem</td>
+</tr>
+</tbody>
+</table>
+<h3 id="funcionalidades-do-painel-admin-v20">Funcionalidades do Painel Admin (v2.0)</h3>
+<ul>
+<li>Login com sessão (4h de duração)</li>
+<li>Listagem de cursos agrupados por categoria com thumbnails</li>
+<li><strong>Busca por nome</strong> do curso (tempo real)</li>
+<li><strong>Filtro por nível</strong> (Especialização, MBA, Mestrado, Doutorado)</li>
+<li><strong>Filtro por categoria</strong> (Psicologia, Educação, Saúde, Gestão, Comunicação)</li>
+<li>Criar, editar e excluir cursos</li>
+<li><strong>Upload de capa</strong> (JPG, PNG, WebP) com preview</li>
+<li><strong>Remover imagem</strong> de capa</li>
+<li>Professores dinâmicos (adicionar/remover)</li>
+<li>Campos condicionais (vazios não aparecem no site)</li>
+<li>Alterações refletem imediatamente no site público</li>
+<li>Badge "Sem capa" para cursos sem imagem</li>
+<li>Badge "Destaque" para cursos da home</li>
+</ul>
+<hr />
+<p><em>Documento atualizado em 27 de março de 2026.</em></p>
+</body>
+</html>

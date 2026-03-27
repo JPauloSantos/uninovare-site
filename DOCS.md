@@ -569,6 +569,27 @@ node /var/www/uninovare-admin/server.js  # Testar manual
 | `4e6ab38` | fix: cursos em destaque hardcoded no HTML |
 | `7ac0ab3` | feat: sistema admin web Node.js/Express |
 | `519aae5` | fix: SyntaxError no JS do admin |
+| `4f52749` | fix: corrigir erro JS aspas escapadas no admin |
+| `5195528` | fix: admin lista cursos (cookie path + thumbnails) |
+| `721ffe0` | docs: documentação técnica completa |
+| `cf5dcf1` | feat: busca/filtro de cursos + upload de capa no admin |
+| `4ebc7d4` | fix: botão remover imagem + selecionar imagem |
+
+### Funcionalidades do Painel Admin (v2.0)
+
+- Login com sessão (4h de duração)
+- Listagem de cursos agrupados por categoria com thumbnails
+- **Busca por nome** do curso (tempo real)
+- **Filtro por nível** (Especialização, MBA, Mestrado, Doutorado)
+- **Filtro por categoria** (Psicologia, Educação, Saúde, Gestão, Comunicação)
+- Criar, editar e excluir cursos
+- **Upload de capa** (JPG, PNG, WebP) com preview
+- **Remover imagem** de capa
+- Professores dinâmicos (adicionar/remover)
+- Campos condicionais (vazios não aparecem no site)
+- Alterações refletem imediatamente no site público
+- Badge "Sem capa" para cursos sem imagem
+- Badge "Destaque" para cursos da home
 
 ---
 
