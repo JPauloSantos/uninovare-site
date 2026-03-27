@@ -1,0 +1,387 @@
+/* ══════════════════════════════════════════════════════════════
+   UNINOVARE — Cursos Stylesheet
+   Estilos para cursos.html (listagem) e curso.html (detalhe)
+   ══════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────
+   LISTAGEM — cursos.html
+   ───────────────────────────────────────────── */
+
+/* Barra de filtros */
+.filtro-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.filtro-btn {
+  font-family: "Baloo 2", cursive, sans-serif;
+  font-weight: 700;
+  font-size: .9rem;
+  padding: 8px 22px;
+  border: 2px solid var(--border);
+  background: var(--card-solid);
+  color: var(--ink);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: all .25s ease;
+}
+
+.filtro-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.filtro-btn--active {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.filtro-btn--active:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+  color: #fff;
+}
+
+/* Contador de resultados */
+#cursos-count {
+  font-size: .85rem;
+  color: var(--ink-muted);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Grid de cursos */
+#cursos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* Card de curso */
+.cursoCard {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+
+.cursoCard:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow);
+}
+
+/* Imagem do card */
+.cursoCard__media {
+  height: 200px;
+  overflow: hidden;
+}
+
+.cursoCard__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform .4s ease;
+}
+
+.cursoCard:hover .cursoCard__media img {
+  transform: scale(1.06);
+}
+
+/* Placeholder quando sem imagem */
+.cursoCard__media--placeholder {
+  height: 200px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-family: "Baloo 2", cursive, sans-serif;
+  font-weight: 800;
+  font-size: 2.4rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Corpo do card */
+.cursoCard__body {
+  padding: 20px;
+}
+
+/* Pills de categoria/nível */
+.cursoCard__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.cursoCard__pills span {
+  font-size: .75rem;
+  font-weight: 700;
+  padding: 3px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+/* Título */
+.cursoCard__title {
+  font-family: "Baloo 2", cursive, sans-serif;
+  font-weight: 800;
+  font-size: 1.15rem;
+  line-height: 1.3;
+  margin-bottom: 6px;
+  color: var(--ink);
+}
+
+/* Descrição */
+.cursoCard__desc {
+  color: var(--ink-soft);
+  font-size: .9rem;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+/* Ações do card */
+.cursoCard__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Animação de filtragem */
+.cursos-fade-out {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .3s ease, transform .3s ease;
+}
+
+/* Estado vazio */
+#cursos-vazio {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--ink-muted);
+  font-size: 1rem;
+}
+
+/* ─────────────────────────────────────────────
+   DETALHE — curso.html
+   ───────────────────────────────────────────── */
+
+/* Header com imagem */
+.curso-header {
+  max-height: 400px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+
+.curso-header img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.curso-header--placeholder {
+  min-height: 250px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-family: "Baloo 2", cursive, sans-serif;
+  font-weight: 800;
+  font-size: 3rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  border-radius: var(--radius-lg);
+  margin-bottom: 32px;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: .85rem;
+  color: var(--ink-muted);
+  margin-bottom: 20px;
+}
+
+.breadcrumb a {
+  color: var(--ink-soft);
+  transition: color .2s ease;
+}
+
+.breadcrumb a:hover {
+  color: var(--primary);
+}
+
+.breadcrumb span {
+  color: var(--ink-muted);
+}
+
+/* Grid de informações rápidas */
+.curso-info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.curso-info-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.curso-info-card__label {
+  display: block;
+  font-size: .75rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: 4px;
+}
+
+.curso-info-card__value {
+  font-family: "Baloo 2", cursive, sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--ink);
+}
+
+/* Seções de conteúdo */
+.curso-section {
+  margin-bottom: 32px;
+}
+
+.curso-section h2 {
+  font-family: "Baloo 2", cursive, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  border-bottom: 2px solid var(--primary-light);
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+  color: var(--ink);
+}
+
+/* Grid de professores */
+.professor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.professor-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.professor-card img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--card-solid);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 12px;
+}
+
+.professor-card--placeholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-family: "Baloo 2", cursive, sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.professor-card__nome {
+  font-family: "Baloo 2", cursive, sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+}
+
+.professor-card__titulacao {
+  font-size: .75rem;
+  font-weight: 700;
+  padding: 3px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-light);
+  color: var(--primary-dark);
+  margin-bottom: 10px;
+}
+
+.professor-card__bio {
+  font-size: .85rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+/* CTA de inscrição */
+.curso-cta {
+  text-align: center;
+  padding: 40px 24px;
+  background: var(--primary-light);
+  border-radius: var(--radius-lg);
+  margin-top: 40px;
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVO
+   ───────────────────────────────────────────── */
+
+@media (max-width: 900px) {
+  .curso-info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  #cursos-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .curso-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .professor-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .curso-header {
+    max-height: 260px;
+    border-radius: var(--radius);
+  }
+
+  .curso-header--placeholder {
+    min-height: 180px;
+    font-size: 2rem;
+    border-radius: var(--radius);
+  }
+}

@@ -1,0 +1,28 @@
+# Backups e arquivos temporários
+*.zip
+*.bak
+*.tmp
+ziarWsJD
+
+# Documentos originais (ficam só local)
+*.docx
+Modificações do site/
+Imagens dos cursos/
+Banner cursó do mês.PNG
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Node (caso use futuramente)
+node_modules/
+package-lock.json
+
+# Versão antiga do site
+uninovare-site-working-no-identidade/
+uninovare-site.zip

@@ -1,0 +1,79 @@
+/* ══════════════════════════════════════════════════════════════
+   UNINOVARE — Soluções Educacionais Page
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Hero ── */
+.hero-solucoes {
+  padding: 72px 0 48px;
+  text-align: center;
+}
+.hero-solucoes .lead {
+  margin-inline: auto;
+  margin-top: 16px;
+}
+
+/* ── Service Cards ── */
+.service-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.service-card__icon {
+  width: 56px; height: 56px;
+  display: grid; place-items: center;
+  border-radius: 16px;
+  background: var(--primary-light);
+  border: 1px solid rgba(58,125,68,.15);
+}
+.service-card__icon svg {
+  width: 28px; height: 28px;
+  fill: var(--primary);
+}
+
+.service-card__subareas {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-top: 4px;
+}
+
+.service-card .btn {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+/* ── Badge "Em breve" ── */
+.badge-soon {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-light);
+  border: 1px solid rgba(255,200,87,.40);
+  font-family: "Baloo 2", system-ui;
+  font-weight: 800; font-size: .82rem;
+  color: var(--ink);
+}
+
+/* ── Disabled button ── */
+.btn--disabled {
+  background: rgba(31,42,46,.08);
+  color: var(--ink-muted);
+  cursor: not-allowed;
+  box-shadow: none;
+  border-color: var(--border);
+}
+.btn--disabled:hover {
+  transform: none;
+  filter: none;
+}
+
+/* ── CTA Section ── */
+.cta-section {
+  text-align: center;
+  padding: 56px 0;
+}
+.cta-section h2 {
+  margin-bottom: 12px;
+}
+.cta-section .lead {
+  margin-inline: auto;
+  margin-bottom: 24px;
+}

@@ -1,0 +1,24 @@
+User-agent: *
+Allow: /
+
+# Bloquear painel admin de indexação
+Disallow: /admin.html
+
+# Sitemap
+Sitemap: https://uninovare.com.br/sitemap.xml
+
+# Crawl-delay para bots genéricos
+Crawl-delay: 1
+
+# Google
+User-agent: Googlebot
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
+
+# Yandex
+User-agent: YandexBot
+Crawl-delay: 2
+Allow: /

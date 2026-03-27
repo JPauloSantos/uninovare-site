@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!-- Bloquear indexação -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+
+  <title>Painel Administrativo — UNINOVARE</title>
+
+  <!-- Preconnect / Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/admin.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/logos/logo-horizontal.jpg">
+</head>
+<body>
+
+  <!-- ════════════════════════════════════════════════════════════
+       1. ADMIN HEADER
+       ════════════════════════════════════════════════════════════ -->
+  <header class="section admin-header">
+    <div class="container">
+      <h1>Painel Administrativo — <span class="accent">UNINOVARE</span></h1>
+      <p class="lead">Gerenciamento de Cursos</p>
+
+      <div class="admin-header__actions">
+        <button class="btn btn--primary" id="btn-novo-curso" type="button">＋ Novo Curso</button>
+        <button class="btn btn--ghost" id="btn-importar" type="button">📥 Importar JSON</button>
+        <button class="btn btn--accent" id="btn-exportar" type="button">📤 Exportar JSON</button>
+        <a href="index.html" class="btn btn--ghost">← Voltar ao Site</a>
+      </div>
+
+      <input type="file" id="file-importar" accept=".json" hidden>
+    </div>
+  </header>
+
+  <!-- ════════════════════════════════════════════════════════════
+       2. LISTA DE CURSOS
+       ════════════════════════════════════════════════════════════ -->
+  <section class="section" id="admin-lista">
+    <div class="container">
+      <h2>Cursos Cadastrados</h2>
+
+      <div class="admin-lista__tabela" id="admin-tabela">
+        <!-- Conteúdo gerado via JS -->
+      </div>
+
+      <div class="admin-lista__vazio" id="admin-lista-vazio">
+        <p>Nenhum curso cadastrado ainda. Clique em <strong>"Novo Curso"</strong> para começar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       3. FORMULÁRIO DE CURSO (inicialmente oculto)
+       ════════════════════════════════════════════════════════════ -->
+  <section class="section section--alt" id="admin-form-section" hidden>
+    <div class="container">
+      <h2 id="form-titulo">Cadastro de Curso</h2>
+
+      <form class="form admin-form" id="curso-form" novalidate>
+
+        <!-- ID oculto para modo de edição -->
+        <input type="hidden" id="f-editing-id" value="">
+
+        <!-- ── Informações Básicas ── -->
+        <fieldset class="admin-form__fieldset">
+          <legend>Informações Básicas</legend>
+
+          <label>
+            <span>Nome do Curso *</span>
+            <input type="text" id="f-nome" name="nome" required placeholder="Ex.: Neuropsicopedagogia Clínica">
+          </label>
+
+          <div class="admin-form__row">
+            <label>
+              <span>Categoria</span>
+              <select id="f-categoria" name="categoria">
+                <option value="">Selecione...</option>
+                <option value="Psicologia">Psicologia</option>
+                <option value="Educação">Educação</option>
+                <option value="Saúde">Saúde</option>
+                <option value="Gestão">Gestão</option>
+                <option value="Comunicação">Comunicação</option>
+              </select>
+            </label>
+
+            <label>
+              <span>Nível</span>
+              <select id="f-nivel" name="nivel">
+                <option value="">Selecione...</option>
+                <option value="Especialização">Especialização</option>
+                <option value="MBA">MBA</option>
+                <option value="Mestrado">Mestrado</option>
+                <option value="Doutorado">Doutorado</option>
+              </select>
+            </label>
+          </div>
+
+          <label class="admin-form__checkbox">
+            <input type="checkbox" id="f-destaque" name="destaque">
+            <span>Curso em Destaque</span>
+          </label>
+        </fieldset>
+
+        <!-- ── Imagens ── -->
+        <fieldset class="admin-form__fieldset">
+          <legend>Imagens</legend>
+
+          <label>
+            <span>Capa do Curso (caminho ou URL)</span>
+            <input type="text" id="f-capa" name="capa" placeholder="assets/cursos/nome-do-curso.jpg">
+          </label>
+        </fieldset>
+
+        <!-- ── Detalhes ── -->
+        <fieldset class="admin-form__fieldset">
+          <legend>Detalhes</legend>
+
+          <label>
+            <span>Objetivo do Curso</span>
+            <textarea id="f-objetivo" name="objetivo" rows="4" placeholder="Descreva o objetivo principal do curso..."></textarea>
+          </label>
+
+          <label>
+            <span>Descrição</span>
+            <textarea id="f-descricao" name="descricao" rows="4" placeholder="Descrição completa do curso..."></textarea>
+          </label>
+
+          <label>
+            <span>Diferencial</span>
+            <input type="text" id="f-diferencial" name="diferencial" placeholder="O que torna este curso único?">
+          </label>
+
+          <label>
+            <span>Público-Alvo</span>
+            <textarea id="f-publico" name="publico" rows="3" placeholder="Para quem este curso é indicado..."></textarea>
+          </label>
+
+          <div class="admin-form__row">
+            <label>
+              <span>Carga Horária</span>
+              <input type="text" id="f-carga" name="carga" placeholder="360 h/a">
+            </label>
+
+            <label>
+              <span>Duração</span>
+              <input type="text" id="f-duracao" name="duracao" placeholder="15 meses">
+            </label>
+          </div>
+        </fieldset>
+
+        <!-- ── Coordenação ── -->
+        <fieldset class="admin-form__fieldset">
+          <legend>Coordenação</legend>
+
+          <div class="admin-form__row">
+            <label>
+              <span>Nome do Coordenador</span>
+              <input type="text" id="f-coord-nome" name="coordNome" placeholder="Prof. Dr. Nome Sobrenome">
+            </label>
+
+            <label>
+              <span>Fone do Coordenador</span>
+              <input type="text" id="f-coord-fone" name="coordFone" placeholder="(83) 9 9999-0000">
+            </label>
+          </div>
+        </fieldset>
+
+        <!-- ── Corpo Docente ── -->
+        <fieldset class="admin-form__fieldset">
+          <legend>Corpo Docente</legend>
+
+          <div id="professores-container">
+            <!-- Blocos de professores adicionados via JS -->
+          </div>
+
+          <button type="button" class="btn btn--ghost" id="btn-add-professor">＋ Adicionar Professor</button>
+        </fieldset>
+
+        <!-- ── Financeiro e Inscrição ── -->
+        <fieldset class="admin-form__fieldset">
+          <legend>Financeiro e Inscrição</legend>
+
+          <label>
+            <span>Matriz Curricular</span>
+            <textarea id="f-matriz" name="matriz" rows="5" placeholder="Liste as disciplinas separadas por linha..."></textarea>
+          </label>
+
+          <div class="admin-form__row">
+            <label>
+              <span>Valor do Curso</span>
+              <input type="text" id="f-valor" name="valor" placeholder="R$ 249,00/mês">
+            </label>
+
+            <label>
+              <span>Contato de Inscrição</span>
+              <input type="text" id="f-contato-inscricao" name="contatoInscricao" placeholder="(83) 9 9999-0000 ou email">
+            </label>
+          </div>
+
+          <label>
+            <span>Link de Cadastro / Forms</span>
+            <input type="url" id="f-link-cadastro" name="linkCadastro" placeholder="https://forms.google.com/...">
+          </label>
+        </fieldset>
+
+        <!-- ── Ações do Formulário ── -->
+        <div class="admin-form__actions">
+          <button type="submit" class="btn btn--primary">💾 Salvar Curso</button>
+          <button type="button" class="btn btn--ghost" id="btn-cancelar">Cancelar</button>
+        </div>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       4. PREVIEW (inicialmente oculto)
+       ════════════════════════════════════════════════════════════ -->
+  <section class="section" id="admin-preview" hidden>
+    <div class="container">
+      <h2>Pré-visualização do Curso</h2>
+
+      <div class="admin-preview__card card" id="preview-card">
+
+        <div class="admin-preview__capa" id="preview-capa">
+          <img src="" alt="Capa do curso" id="preview-capa-img">
+        </div>
+
+        <div class="admin-preview__body">
+          <div class="admin-preview__meta">
+            <span class="pill pill--primary" id="preview-categoria">Categoria</span>
+            <span class="pill" id="preview-nivel">Nível</span>
+            <span class="pill pill--hot" id="preview-destaque" hidden>⭐ Destaque</span>
+          </div>
+
+          <h3 id="preview-nome">Nome do Curso</h3>
+
+          <p class="fine" id="preview-objetivo">Objetivo do curso aparecerá aqui...</p>
+
+          <p id="preview-descricao">Descrição do curso aparecerá aqui...</p>
+
+          <div class="admin-preview__info">
+            <div>
+              <strong>Diferencial:</strong>
+              <span id="preview-diferencial">—</span>
+            </div>
+            <div>
+              <strong>Público-Alvo:</strong>
+              <span id="preview-publico">—</span>
+            </div>
+            <div>
+              <strong>Carga Horária:</strong>
+              <span id="preview-carga">—</span>
+            </div>
+            <div>
+              <strong>Duração:</strong>
+              <span id="preview-duracao">—</span>
+            </div>
+          </div>
+
+          <div class="admin-preview__coord">
+            <strong>Coordenação:</strong>
+            <span id="preview-coord-nome">—</span> |
+            <span id="preview-coord-fone">—</span>
+          </div>
+
+          <div class="admin-preview__professores" id="preview-professores">
+            <!-- Professores renderizados via JS -->
+          </div>
+
+          <div class="admin-preview__financeiro">
+            <div>
+              <strong>Valor:</strong>
+              <span id="preview-valor">—</span>
+            </div>
+            <div>
+              <strong>Contato:</strong>
+              <span id="preview-contato">—</span>
+            </div>
+            <div>
+              <strong>Inscrição:</strong>
+              <a href="#" id="preview-link-cadastro" target="_blank" rel="noopener">Link de cadastro</a>
+            </div>
+          </div>
+
+          <div class="admin-preview__matriz">
+            <strong>Matriz Curricular:</strong>
+            <pre id="preview-matriz">—</pre>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════════════════════════
+       TEMPLATE: Bloco de Professor (clonado via JS)
+       ════════════════════════════════════════════════════════════ -->
+  <template id="tpl-professor">
+    <div class="admin-professor-block card card--flat">
+      <label>
+        <span>Foto do Professor (caminho ou URL)</span>
+        <input type="text" class="prof-foto" name="profFoto" placeholder="assets/professores/nome.jpg">
+      </label>
+      <label>
+        <span>Nome do Professor</span>
+        <input type="text" class="prof-nome" name="profNome" placeholder="Prof. Nome Sobrenome">
+      </label>
+      <label>
+        <span>Mini Currículo</span>
+        <textarea class="prof-mini" name="profMini" rows="3" placeholder="Resumo da trajetória profissional..."></textarea>
+      </label>
+      <label>
+        <span>Titulação</span>
+        <input type="text" class="prof-titulacao" name="profTitulacao" placeholder="Doutor em...">
+      </label>
+      <button type="button" class="btn btn--ghost btn--sm admin-btn-remover-prof">✕ Remover Professor</button>
+    </div>
+  </template>
+
+  <!-- Script -->
+  <script src="js/admin.js"></script>
+
+</body>
+</html>

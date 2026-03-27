@@ -1,0 +1,281 @@
+/* ══════════════════════════════════════════════════════════════
+   UNINOVARE — Admin Panel Styles
+   Painel de Gerenciamento de Cursos
+   Depende de: global.css (variáveis e base)
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Admin Layout ── */
+
+.admin-header {
+  padding: 32px 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+
+.admin-header h1 {
+  font-family: "Baloo 2", system-ui, sans-serif;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+/* ── Course List ── */
+
+.admin-lista {
+  margin-top: 24px;
+}
+
+.admin-grupo {
+  margin-bottom: 24px;
+}
+
+.admin-grupo__titulo {
+  font-family: "Baloo 2", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--ink);
+  border-bottom: 2px solid var(--primary-light);
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.admin-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.admin-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.admin-item__info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-item__nome {
+  font-family: "Baloo 2", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.admin-item__badges {
+  display: flex;
+  gap: 6px;
+}
+
+.admin-item__badges .pill {
+  font-size: 0.78rem;
+  padding: 4px 10px;
+}
+
+.admin-item__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-item__actions .btn {
+  padding: 8px 14px;
+  font-size: 0.82rem;
+}
+
+.btn--danger {
+  background: #e74c3c;
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 10px 24px rgba(231, 76, 60, 0.18);
+}
+
+.btn--danger:hover {
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.admin-empty {
+  text-align: center;
+  padding: 40px;
+  color: var(--ink-muted);
+  font-family: "Baloo 2", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+/* ── Form Section ── */
+
+#admin-form-section {
+  margin-top: 32px;
+  padding: 32px;
+  background: var(--card-solid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-grid--full {
+  grid-column: span 2;
+}
+
+.form-section-title {
+  font-family: "Baloo 2", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--primary);
+  margin-top: 24px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+
+/* ── Professor Blocks ── */
+
+.professor-bloco {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.5);
+  position: relative;
+}
+
+.professor-bloco .form-grid {
+  padding-right: 24px;
+}
+
+.professor-bloco__remover {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  background: #e74c3c;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: filter 0.18s ease, transform 0.18s ease;
+}
+
+.professor-bloco__remover:hover {
+  filter: brightness(1.1);
+  transform: scale(1.08);
+}
+
+.professor-bloco__numero {
+  font-family: "Baloo 2", system-ui, sans-serif;
+  font-weight: 800;
+  color: var(--ink-muted);
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+/* ── Preview ── */
+
+#admin-preview {
+  margin-top: 24px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--sand);
+  min-height: 200px;
+}
+
+.preview-titulo {
+  font-family: "Baloo 2", system-ui, sans-serif;
+  font-weight: 800;
+  font-size: 0.92rem;
+  color: var(--ink-muted);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── Toast / Messages ── */
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  padding: 14px 24px;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: #fff;
+  font-family: "Baloo 2", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: 0.92rem;
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  animation: slideUp 0.3s ease forwards;
+}
+
+.toast--error {
+  background: #e74c3c;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid--full {
+    grid-column: span 1;
+  }
+
+  .admin-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-item__actions {
+    margin-top: 10px;
+  }
+
+  #admin-form-section {
+    padding: 20px;
+  }
+
+  .professor-bloco .form-grid {
+    padding-right: 0;
+  }
+}
