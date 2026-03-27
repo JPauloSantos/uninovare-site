@@ -29,11 +29,12 @@ app.use(session({
 // Auth middleware
 function requireAuth(req, res, next) {
   if (req.session && req.session.authenticated) return next();
-  if (req.path === '/login' || req.path === '/api/login') return next();
+  // Permitir rotas de login e API de login sem autenticação
+  if (req.path.endsWith('/login') || req.path === '/api/login') return next();
   if (req.headers.accept && req.headers.accept.includes('json')) {
     return res.status(401).json({ error: 'Não autenticado' });
   }
-  res.redirect('/login');
+  res.redirect('/admin/login');
 }
 
 app.use(requireAuth);
@@ -155,12 +156,13 @@ function generateSlug(nome) {
 
 // ── PÁGINAS HTML ──
 
-app.get('/login', (req, res) => {
-  if (req.session && req.session.authenticated) return res.redirect('/');
+// Rotas com e sem prefixo /admin (Nginx faz proxy de /admin → /)
+app.get(['/login', '/admin/login'], (req, res) => {
+  if (req.session && req.session.authenticated) return res.redirect('/admin');
   res.send(loginPage());
 });
 
-app.get('/', (req, res) => {
+app.get(['/', '/admin'], (req, res) => {
   res.send(adminPage());
 });
 
@@ -221,7 +223,7 @@ function loginPage() {
         headers:{'Content-Type':'application/json'},
         body:JSON.stringify({usuario:document.getElementById('usuario').value,senha:document.getElementById('senha').value})
       });
-      if(r.ok){window.location='/'}
+      if(r.ok){window.location='/admin'}
       else{document.getElementById('erro').style.display='block'}
     });
   </script>
@@ -556,7 +558,7 @@ document.getElementById('overlay').addEventListener('click', e => { if (e.target
 
 async function logout() {
   await fetch(API + '/api/logout', { method: 'POST' });
-  window.location = '/login';
+  window.location = '/admin/login';
 }
 
 function toast(msg, erro) {
