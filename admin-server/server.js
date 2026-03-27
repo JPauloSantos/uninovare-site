@@ -279,6 +279,20 @@ function adminPage() {
     .vazio{text-align:center;padding:48px;color:var(--ink-soft);border:2px dashed var(--border);border-radius:var(--radius)}
     .contagem{color:var(--ink-soft);font-size:.85rem;margin-bottom:16px}
 
+    /* Busca/Filtro */
+    .busca-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;padding:16px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .busca-input{flex:1;min-width:200px;padding:10px 14px;border:1px solid rgba(31,42,46,.14);border-radius:10px;font-family:inherit;font-size:.92rem}
+    .busca-input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(58,125,68,.1)}
+    .busca-select{padding:10px 12px;border:1px solid rgba(31,42,46,.14);border-radius:10px;font-family:inherit;font-size:.88rem;background:#fff;min-width:160px}
+    .busca-select:focus{outline:none;border-color:var(--primary)}
+
+    /* Upload de Capa */
+    .capa-upload{display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap}
+    .capa-preview{width:120px;height:80px;border-radius:10px;border:2px dashed var(--border);display:grid;place-items:center;font-size:.75rem;color:var(--ink-soft);background:rgba(255,255,255,.5);overflow:hidden;flex-shrink:0}
+    .capa-preview img{width:100%;height:100%;object-fit:cover}
+    .capa-actions{flex:1;display:flex;flex-direction:column;gap:8px}
+    .capa-actions input[type=text]{padding:8px 12px;border:1px solid rgba(31,42,46,.14);border-radius:8px;font-size:.88rem}
+
     /* Modal/Form */
     .overlay{display:none;position:fixed;inset:0;background:rgba(31,42,46,.5);z-index:100;overflow-y:auto;padding:24px}
     .overlay.aberto{display:flex;justify-content:center;align-items:flex-start}
@@ -325,6 +339,24 @@ function adminPage() {
   </div>
 
   <div class="container">
+    <div class="busca-bar">
+      <input type="text" id="busca" placeholder="Buscar por nome do curso..." class="busca-input">
+      <select id="filtro-nivel" class="busca-select">
+        <option value="">Todos os Níveis</option>
+        <option value="Especialização">Especialização</option>
+        <option value="MBA">MBA</option>
+        <option value="Mestrado">Mestrado</option>
+        <option value="Doutorado">Doutorado</option>
+      </select>
+      <select id="filtro-cat" class="busca-select">
+        <option value="">Todas as Categorias</option>
+        <option value="Psicologia">Psicologia</option>
+        <option value="Educação">Educação</option>
+        <option value="Saúde">Saúde</option>
+        <option value="Gestão">Gestão</option>
+        <option value="Comunicação">Comunicação</option>
+      </select>
+    </div>
     <p class="contagem" id="contagem"></p>
     <div id="lista"></div>
   </div>
@@ -355,7 +387,18 @@ function adminPage() {
             <option value="Doutorado">Doutorado</option>
           </select>
         </div>
-        <div class="field"><label>Capa (caminho)</label><input id="f-capa" placeholder="assets/cursos/nome.jpg"></div>
+        <div class="field form-full">
+          <label>Capa do Curso</label>
+          <div class="capa-upload">
+            <div class="capa-preview" id="capa-preview">Sem imagem</div>
+            <div class="capa-actions">
+              <input type="file" id="f-capa-file" accept="image/jpeg,image/png,image/webp" style="display:none">
+              <button type="button" class="btn btn--ghost btn--sm" onclick="document.getElementById('f-capa-file').click()">Enviar imagem (JPG, PNG, WebP)</button>
+              <input id="f-capa" placeholder="Ou digite: assets/cursos/nome.jpg" style="flex:1">
+              <span class="fine" id="capa-status"></span>
+            </div>
+          </div>
+        </div>
         <div class="field-check form-full"><input type="checkbox" id="f-destaque"><label for="f-destaque">Curso em destaque (aparece na home)</label></div>
 
         <div class="sep">Detalhes do Curso</div>
@@ -466,6 +509,7 @@ function novoCurso() {
   document.getElementById('f-id').value = '';
   document.getElementById('professores').innerHTML = '';
   document.getElementById('modalTitulo').textContent = 'Novo Curso';
+  atualizarCapaPreview('');
   abrirModal();
 }
 
@@ -478,6 +522,7 @@ function editarCurso(id) {
   document.getElementById('f-categoria').value = c.categoria || 'Psicologia';
   document.getElementById('f-nivel').value = c.nivel || 'Especialização';
   document.getElementById('f-capa').value = c.capa || '';
+  atualizarCapaPreview(c.capa || '');
   document.getElementById('f-destaque').checked = !!c.destaque;
   document.getElementById('f-objetivo').value = c.objetivo || '';
   document.getElementById('f-descricao').value = c.descricao || '';
@@ -596,6 +641,128 @@ function toast(msg, erro) {
 }
 
 function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = String(s); return d.innerHTML; }
+
+// ── Busca e Filtros ──
+document.getElementById('busca').addEventListener('input', aplicarFiltros);
+document.getElementById('filtro-nivel').addEventListener('change', aplicarFiltros);
+document.getElementById('filtro-cat').addEventListener('change', aplicarFiltros);
+
+function aplicarFiltros() {
+  const termo = document.getElementById('busca').value.toLowerCase().trim();
+  const nivel = document.getElementById('filtro-nivel').value;
+  const cat = document.getElementById('filtro-cat').value;
+
+  const filtrados = cursos.filter(c => {
+    const matchNome = !termo || (c.nome || '').toLowerCase().includes(termo);
+    const matchNivel = !nivel || c.nivel === nivel;
+    const matchCat = !cat || c.categoria === cat;
+    return matchNome && matchNivel && matchCat;
+  });
+
+  renderListaFiltrada(filtrados);
+}
+
+function renderListaFiltrada(lista) {
+  const el = document.getElementById('lista');
+  const cont = document.getElementById('contagem');
+  cont.textContent = lista.length + ' de ' + cursos.length + ' curso(s)';
+
+  if (lista.length === 0) {
+    el.innerHTML = '<div class="vazio"><p>Nenhum curso encontrado com esses filtros.</p></div>';
+    return;
+  }
+
+  const grupos = {};
+  lista.forEach(c => {
+    const cat = c.categoria || 'Sem Categoria';
+    if (!grupos[cat]) grupos[cat] = [];
+    grupos[cat].push(c);
+  });
+
+  let html = '';
+  Object.keys(grupos).sort().forEach(cat => {
+    html += '<div class="grupo">';
+    html += '<h3 class="grupo__titulo">' + esc(cat) + ' (' + grupos[cat].length + ')</h3>';
+    grupos[cat].forEach(c => {
+      const initials = (c.nome||'XX').substring(0,2).toUpperCase();
+      const thumb = c.capa
+        ? '<img src="https://uninovare.com.br/' + esc(c.capa) + '" style="width:40px;height:40px;border-radius:8px;object-fit:cover;border:1px solid rgba(31,42,46,.1)">'
+        : '<div style="width:40px;height:40px;border-radius:8px;background:linear-gradient(135deg,rgba(58,125,68,.15),rgba(86,124,141,.2));display:grid;place-items:center;font-weight:800;font-size:.7rem;color:rgba(31,42,46,.35);border:1px solid rgba(31,42,46,.1)">' + initials + '</div>';
+      html += '<div class="item">';
+      html += '  <div class="item__info">';
+      html += '    ' + thumb;
+      html += '    <span class="item__nome">' + esc(c.nome) + '</span>';
+      html += '    <span class="pill pill--cat">' + esc(c.nivel || '') + '</span>';
+      if (c.destaque) html += '<span class="pill pill--destaque">Destaque</span>';
+      if (!c.capa) html += '<span class="pill" style="background:rgba(231,76,60,.1);color:#e74c3c;border-color:rgba(231,76,60,.2)">Sem capa</span>';
+      html += '  </div>';
+      html += '  <div class="item__actions">';
+      html += '    <button class="btn btn--ghost btn--sm" data-editar="' + esc(c.id) + '">Editar</button>';
+      html += '    <button class="btn btn--danger btn--sm" data-excluir="' + esc(c.id) + '">Excluir</button>';
+      html += '  </div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  });
+  el.innerHTML = html;
+
+  el.querySelectorAll('[data-editar]').forEach(btn => {
+    btn.addEventListener('click', () => editarCurso(btn.dataset.editar));
+  });
+  el.querySelectorAll('[data-excluir]').forEach(btn => {
+    btn.addEventListener('click', () => excluirCurso(btn.dataset.excluir));
+  });
+}
+
+// ── Upload de Capa ──
+document.getElementById('f-capa-file').addEventListener('change', async function() {
+  const file = this.files[0];
+  if (!file) return;
+
+  const status = document.getElementById('capa-status');
+  status.textContent = 'Enviando...';
+
+  const formData = new FormData();
+  formData.append('imagem', file);
+  formData.append('tipo', 'cursos');
+
+  try {
+    const r = await fetch('/api/upload', { method: 'POST', body: formData, credentials: 'same-origin' });
+    const data = await r.json();
+    if (data.ok) {
+      document.getElementById('f-capa').value = data.path;
+      atualizarCapaPreview(data.path);
+      status.textContent = 'Enviado!';
+      status.style.color = 'var(--primary)';
+      setTimeout(() => { status.textContent = ''; }, 3000);
+    } else {
+      status.textContent = 'Erro: ' + (data.error || 'falha');
+      status.style.color = '#e74c3c';
+    }
+  } catch(e) {
+    status.textContent = 'Erro ao enviar';
+    status.style.color = '#e74c3c';
+  }
+  this.value = '';
+});
+
+document.getElementById('f-capa').addEventListener('input', function() {
+  atualizarCapaPreview(this.value);
+});
+
+function atualizarCapaPreview(path) {
+  const preview = document.getElementById('capa-preview');
+  if (path) {
+    const url = path.startsWith('http') ? path : 'https://uninovare.com.br/' + path;
+    const img = document.createElement('img');
+    img.src = url;
+    img.onerror = function() { preview.textContent = 'Imagem não encontrada'; };
+    preview.innerHTML = '';
+    preview.appendChild(img);
+  } else {
+    preview.textContent = 'Sem imagem';
+  }
+}
 </script>
 </body>
 </html>`;
