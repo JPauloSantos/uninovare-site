@@ -393,7 +393,10 @@ function adminPage() {
             <div class="capa-preview" id="capa-preview">Sem imagem</div>
             <div class="capa-actions">
               <input type="file" id="f-capa-file" accept="image/jpeg,image/png,image/webp" style="display:none">
-              <button type="button" class="btn btn--ghost btn--sm" onclick="document.getElementById('f-capa-file').click()">Enviar imagem (JPG, PNG, WebP)</button>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <button type="button" class="btn btn--ghost btn--sm" onclick="document.getElementById('f-capa-file').click()">Selecionar imagem (JPG, PNG, WebP)</button>
+                <button type="button" class="btn btn--danger btn--sm" id="btn-remover-capa" style="display:none" onclick="removerCapa()">Remover imagem</button>
+              </div>
               <input id="f-capa" placeholder="Ou digite: assets/cursos/nome.jpg" style="flex:1">
               <span class="fine" id="capa-status"></span>
             </div>
@@ -752,6 +755,7 @@ document.getElementById('f-capa').addEventListener('input', function() {
 
 function atualizarCapaPreview(path) {
   const preview = document.getElementById('capa-preview');
+  const btnRemover = document.getElementById('btn-remover-capa');
   if (path) {
     const url = path.startsWith('http') ? path : 'https://uninovare.com.br/' + path;
     const img = document.createElement('img');
@@ -759,9 +763,18 @@ function atualizarCapaPreview(path) {
     img.onerror = function() { preview.textContent = 'Imagem não encontrada'; };
     preview.innerHTML = '';
     preview.appendChild(img);
+    if (btnRemover) btnRemover.style.display = 'inline-flex';
   } else {
     preview.textContent = 'Sem imagem';
+    if (btnRemover) btnRemover.style.display = 'none';
   }
+}
+
+function removerCapa() {
+  document.getElementById('f-capa').value = '';
+  atualizarCapaPreview('');
+  document.getElementById('capa-status').textContent = 'Imagem removida';
+  setTimeout(() => { document.getElementById('capa-status').textContent = ''; }, 2000);
 }
 </script>
 </body>
