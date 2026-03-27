@@ -92,7 +92,8 @@
   margin-bottom: 48px;
 }
 
-.equipe-card {
+.equipe-card,
+.card--equipe {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -102,12 +103,14 @@
   transition: transform .3s ease, box-shadow .3s ease;
 }
 
-.equipe-card:hover {
+.equipe-card:hover,
+.card--equipe:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow);
 }
 
-.equipe-card__foto {
+.equipe-card__foto,
+.equipe__photo {
   width: 140px;
   height: 140px;
   border-radius: 50%;
@@ -118,7 +121,14 @@
   display: block;
 }
 
-.equipe-card__foto--placeholder {
+.equipe__photo-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.equipe-card__foto--placeholder,
+.equipe__photo-placeholder {
   width: 140px;
   height: 140px;
   border-radius: 50%;
@@ -136,7 +146,8 @@
   box-shadow: var(--shadow-sm);
 }
 
-.equipe-card__nome {
+.equipe-card__nome,
+.equipe__nome {
   font-family: "Baloo 2", cursive, sans-serif;
   font-weight: 800;
   font-size: 1.15rem;
@@ -144,7 +155,8 @@
   margin-bottom: 8px;
 }
 
-.equipe-card__cargo {
+.equipe-card__cargo,
+.equipe__cargo {
   display: inline-block;
   font-size: .78rem;
   font-weight: 700;
@@ -155,7 +167,8 @@
   margin-bottom: 12px;
 }
 
-.equipe-card__bio {
+.equipe-card__bio,
+.equipe__bio {
   color: var(--ink-muted);
   font-size: .88rem;
   line-height: 1.7;

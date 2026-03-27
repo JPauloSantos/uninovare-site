@@ -118,7 +118,7 @@
     }
 
     // Formulario
-    var form = document.getElementById('admin-form');
+    var form = document.getElementById('curso-form');
     if (form) {
       form.addEventListener('submit', salvarCurso);
     }
@@ -156,7 +156,7 @@
     }
 
     // Live preview (debounced)
-    var form2 = document.getElementById('admin-form');
+    var form2 = document.getElementById('curso-form');
     if (form2) {
       var campos = form2.querySelectorAll('input, textarea, select');
       campos.forEach(function (campo) {
@@ -182,7 +182,7 @@
      ══════════════════════════════════════════════════════════════ */
 
   function renderLista(cursos) {
-    var lista = document.getElementById('admin-lista');
+    var lista = document.getElementById('admin-tabela');
     if (!lista) return;
 
     cursos = cursos || getCursos() || [];
@@ -257,7 +257,7 @@
      ══════════════════════════════════════════════════════════════ */
 
   function novoCurso() {
-    var form = document.getElementById('admin-form');
+    var form = document.getElementById('curso-form');
     if (form) form.reset();
 
     var editingId = document.getElementById('f-editing-id');
@@ -297,10 +297,10 @@
     setVal('f-descricao', curso.descricao);
     setVal('f-diferencial', curso.diferencial);
     setVal('f-objetivo', curso.objetivo);
-    setVal('f-publico-alvo', curso.publicoAlvo);
-    setVal('f-carga-horaria', curso.cargaHoraria);
+    setVal('f-publico', curso.publicoAlvo);
+    setVal('f-carga', curso.cargaHoraria);
     setVal('f-duracao', curso.duracao);
-    setVal('f-matriz-curricular', curso.matrizCurricular);
+    setVal('f-matriz', curso.matrizCurricular);
     setVal('f-valor', curso.valor);
     setVal('f-contato-inscricao', curso.contatoInscricao);
     setVal('f-link-cadastro', curso.linkCadastro);
@@ -467,15 +467,15 @@
       descricao: getVal('f-descricao'),
       diferencial: getVal('f-diferencial'),
       objetivo: getVal('f-objetivo'),
-      publicoAlvo: getVal('f-publico-alvo'),
-      cargaHoraria: getVal('f-carga-horaria'),
+      publicoAlvo: getVal('f-publico'),
+      cargaHoraria: getVal('f-carga'),
       duracao: getVal('f-duracao'),
       coordenador: {
         nome: getVal('f-coord-nome'),
         fone: getVal('f-coord-fone')
       },
       professores: coletarProfessores(),
-      matrizCurricular: getVal('f-matriz-curricular'),
+      matrizCurricular: getVal('f-matriz'),
       valor: getVal('f-valor'),
       contatoInscricao: getVal('f-contato-inscricao'),
       linkCadastro: getVal('f-link-cadastro'),
@@ -534,14 +534,18 @@
   function mostrarFormulario() {
     var secao = document.getElementById('admin-form-section');
     if (secao) {
-      secao.style.display = 'block';
+      secao.removeAttribute('hidden');
       secao.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+    var preview = document.getElementById('admin-preview');
+    if (preview) preview.removeAttribute('hidden');
   }
 
   function ocultarFormulario() {
     var secao = document.getElementById('admin-form-section');
-    if (secao) secao.style.display = 'none';
+    if (secao) secao.setAttribute('hidden', '');
+    var preview = document.getElementById('admin-preview');
+    if (preview) preview.setAttribute('hidden', '');
   }
 
   /* ══════════════════════════════════════════════════════════════
@@ -651,7 +655,7 @@
     var nivel = getVal('f-nivel');
     var capa = getVal('f-capa');
     var descricao = getVal('f-descricao');
-    var cargaHoraria = getVal('f-carga-horaria');
+    var cargaHoraria = getVal('f-carga');
     var duracao = getVal('f-duracao');
     var valor = getVal('f-valor');
     var destaqueEl = document.getElementById('f-destaque');

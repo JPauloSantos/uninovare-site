@@ -444,6 +444,7 @@
           <a href="index.html">Home</a>
           <a href="quem-somos.html">Quem Somos</a>
           <a href="cursos.html">Cursos</a>
+          <a href="solucoes.html">Soluções</a>
           <a href="contato.html">Contato</a>
         </nav>
 
@@ -499,17 +500,29 @@
             const card = document.createElement('article');
             card.className = 'card';
             card.setAttribute('role', 'listitem');
-            card.style.cssText = 'min-width:300px;max-width:340px;flex-shrink:0;scroll-snap-align:start;display:flex;flex-direction:column;';
+            card.style.cssText = 'min-width:300px;max-width:340px;flex-shrink:0;scroll-snap-align:start;display:flex;flex-direction:column;overflow:hidden;';
 
-            const pillClass = curso.tag === 'Novo' ? 'pill--hot' : 'pill--primary';
-            const imgSrc = curso.imagem || `assets/cursos/${curso.slug || 'default'}.jpg`;
+            const imgSrc = curso.capa || '';
+            const desc = (curso.descricao || '').length > 100 ? curso.descricao.substring(0, 100) + '...' : (curso.descricao || '');
+            const pillLabel = curso.destaque ? 'Destaque' : (curso.nivel || 'Presencial');
+            const pillClass = curso.destaque ? 'pill--hot' : 'pill--primary';
+
+            let imgHtml = '';
+            if (imgSrc) {
+              imgHtml = `<img src="${imgSrc}" alt="${curso.nome}" style="width:100%;height:180px;object-fit:cover;border-radius:var(--radius);margin-bottom:12px;" loading="lazy" onerror="this.style.display='none'">`;
+            } else {
+              imgHtml = `<div style="width:100%;height:180px;border-radius:var(--radius);margin-bottom:12px;background:linear-gradient(135deg,rgba(58,125,68,.15),rgba(86,124,141,.18));display:grid;place-items:center;font-family:'Baloo 2',system-ui;font-weight:800;font-size:2rem;color:rgba(31,42,46,.3);">${(curso.nome || '').substring(0,2).toUpperCase()}</div>`;
+            }
 
             card.innerHTML = `
-              <img src="${imgSrc}" alt="${curso.nome}" style="width:100%;height:180px;object-fit:cover;border-radius:var(--radius);margin-bottom:12px;" loading="lazy">
-              ${curso.tag ? `<span class="pill ${pillClass}" style="margin-bottom:8px;align-self:flex-start;">${curso.tag}</span>` : ''}
+              ${imgHtml}
+              <span class="pill ${pillClass}" style="margin-bottom:8px;align-self:flex-start;">${pillLabel}</span>
               <h3>${curso.nome}</h3>
-              <p class="fine" style="flex:1;">${curso.descricao_curta || curso.descricao || ''}</p>
-              <a href="https://wa.me/558396865555?text=Olá, vim pelo site da UNINOVARE e quero informações sobre o curso: ${encodeURIComponent(curso.nome)}" target="_blank" rel="noopener noreferrer" class="btn btn--primary" style="margin-top:14px;width:100%;text-align:center;">Quero infos</a>
+              <p class="fine" style="flex:1;">${desc}</p>
+              <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+                <a href="curso.html?id=${encodeURIComponent(curso.id)}" class="btn btn--ghost" style="flex:1;text-align:center;">Ver detalhes</a>
+                <a href="https://wa.me/558396865555?text=Olá, vim pelo site da UNINOVARE e quero informações sobre o curso: ${encodeURIComponent(curso.nome)}" target="_blank" rel="noopener noreferrer" class="btn btn--primary" style="flex:1;text-align:center;">Quero infos</a>
+              </div>
             `;
             track.appendChild(card);
           });
