@@ -4,21 +4,28 @@
    ══════════════════════════════════════════════════════════════ */
 
 
-/* ── 1. Banner Hero — Full width, topo da página ── */
+/* ── 1. Banner Hero — Full width, ponta a ponta ── */
 
 .heroBanner {
-  padding: 18px 0 0;
+  padding: 0;
+}
+.heroBanner > .container {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .heroBanner__frame {
-  border-radius: var(--radius-xl);
+  border-radius: 0;
   overflow: hidden;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-lg);
+  border: none;
+  border-bottom: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
   transition: box-shadow .3s ease;
 }
 .heroBanner__frame:hover {
-  box-shadow: 0 28px 60px rgba(31,42,46,.16);
+  box-shadow: 0 12px 40px rgba(31,42,46,.12);
 }
 
 .heroBanner__img {
