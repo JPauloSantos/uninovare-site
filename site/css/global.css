@@ -156,6 +156,15 @@ h4 { font-size: 1.1rem; }
   background: var(--primary-dark);
   color: #fff;
 }
+.nav__link--portal {
+  background: var(--secondary);
+  color: #fff;
+  font-weight: 800;
+}
+.nav__link--portal:hover {
+  background: #476a79;
+  color: #fff;
+}
 
 /* ── Menu Mobile ── */
 .topbar__right { display: flex; align-items: center; gap: 10px; }
