@@ -56,11 +56,20 @@
   margin-bottom: 20px;
 }
 
+/* Contagem */
+.cursos-contagem {
+  text-align: center;
+  color: var(--ink-muted);
+  font-size: .88rem;
+  margin-bottom: 8px;
+}
+
 /* Grid de cursos */
 #cursos-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 20px;
+  justify-content: center;
 }
 
 /* Card de curso */
