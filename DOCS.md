@@ -1,402 +1,470 @@
-# UNINOVARE — Documentacao Tecnica Completa (v2.0)
+# UNINOVARE — Documentacao Tecnica Completa (v2.1)
 
-**Data:** Março de 2026
-**Domínio:** uninovare.com.br
-**Repositório:** github.com/JPauloSantos/uninovare-site (privado)
+**Data:** 06 de Abril de 2026
+**Dominio:** uninovare.com.br
+**Repositorio:** github.com/JPauloSantos/uninovare-site (privado)
 **VPS UNINOVARE:** 187.77.33.115 (Hostinger KVM 2)
-**VPS ESGP:** 187.77.52.115 (outro VPS, não mexer)
+**VPS ESGP:** 187.77.52.115 (outro VPS, nao mexer)
 
 ---
 
 ## SUMARIO
 
-1. [Visão Geral](#1-visao-geral)
-2. [Estrutura de Arquivos](#2-estrutura-de-arquivos)
-3. [Como o Site foi Construído](#3-como-o-site-foi-construido)
-4. [Onde Mexer no Código](#4-onde-mexer-no-codigo)
-5. [Sistema Admin (Gestão de Cursos)](#5-sistema-admin)
-6. [SEO e Indexação](#6-seo-e-indexacao)
-7. [Infraestrutura e Deploy](#7-infraestrutura-e-deploy)
-8. [Manutenção e Troubleshooting](#8-manutencao-e-troubleshooting)
-9. [Credenciais e Acessos](#9-credenciais-e-acessos)
-10. [Histórico de Versões](#10-historico-de-versoes)
+1. [Classificacao do Projeto](#1-classificacao-do-projeto)
+2. [Mapa do Site](#2-mapa-do-site)
+3. [Visao Geral](#3-visao-geral)
+4. [Estrutura de Arquivos](#4-estrutura-de-arquivos)
+5. [Como o Site foi Construido (Passo a Passo)](#5-como-o-site-foi-construido)
+6. [Onde Mexer no Codigo](#6-onde-mexer-no-codigo)
+7. [Sistema Admin (Gestao de Cursos)](#7-sistema-admin)
+8. [SEO e Indexacao](#8-seo-e-indexacao)
+9. [Infraestrutura e Deploy](#9-infraestrutura-e-deploy)
+10. [Manutencao e Troubleshooting](#10-manutencao-e-troubleshooting)
+11. [Credenciais e Acessos](#11-credenciais-e-acessos)
+12. [Historico de Versoes](#12-historico-de-versoes)
 
 ---
 
-## 1. VISAO GERAL
+## 1. CLASSIFICACAO DO PROJETO
 
-O site da UNINOVARE é um site institucional multi-página para a empresa de treinamento, cursos e consultoria em Campina Grande/PB.
+### Tipo: Site Institucional com CMS Headless Leve
 
-### O que mudou (v1.0 → v2.0)
+O projeto UNINOVARE se classifica como:
 
-| Aspecto | v1.0 (anterior) | v2.0 (atual) |
+| Aspecto | Classificacao |
+|---------|--------------|
+| **Tipo de aplicacao** | Site institucional + Web App administrativo |
+| **Arquitetura** | JAMstack simplificado (HTML estatico + API JSON + Admin Node.js) |
+| **Frontend** | Site estatico multi-pagina (SSG-like sem build step) |
+| **Backend** | Micro-API REST (Node.js/Express) para gestao de conteudo |
+| **Banco de dados** | Arquivo JSON flat-file (cursos.json) |
+| **CMS** | CMS headless proprio (admin web com login) |
+| **Hospedagem** | VPS auto-gerenciado (Nginx + pm2) |
+| **Categoria comercial** | Site institucional educacional com catalogo de cursos |
+
+### Por que essa arquitetura?
+
+| Vantagem | Explicacao |
+|----------|-----------|
+| **Performance** | Paginas HTML estaticas = carregamento instantaneo, sem SSR |
+| **Zero dependencias no frontend** | Sem React, Vue, frameworks — HTML/CSS/JS puros |
+| **SEO nativo** | HTML semantico renderizado no servidor, indexacao perfeita |
+| **Facil manutencao** | Editar HTML diretamente ou usar o admin web |
+| **Custo zero** | Sem banco de dados pago, sem hospedagem especial |
+| **Seguranca** | Superficie de ataque minima (arquivos estaticos + 1 micro-API) |
+| **Autonomia** | Cursos gerenciados pelo admin web sem necessidade de desenvolvedor |
+
+### Comparacao com outras abordagens
+
+| Abordagem | Pros | Contras | UNINOVARE usa? |
+|-----------|------|---------|----------------|
+| WordPress | CMS completo, plugins | Lento, vulneravel, hosting especifico | Nao |
+| React SPA | Dinamico, moderno | SEO ruim, complexidade alta | Nao |
+| Next.js | SSR + API | Complexo, build step, Node.js obrigatorio | Nao |
+| HTML estatico puro | Rapido, simples | Dificil de manter cursos | Parcialmente |
+| **HTML + JSON + Admin API** | **Rapido, SEO, editavel, simples** | **Sem features avancadas** | **Sim** |
+
+---
+
+## 2. MAPA DO SITE
+
+### Mapa Visual
+
+```
+uninovare.com.br
+|
+|-- / (HOME)
+|   |-- Banner principal (full-width, arte institucional)
+|   |-- Hero (apresentacao + card logo)
+|   |-- Por que escolher a UNINOVARE (4 diferenciais)
+|   |-- Cursos em Destaque (carrossel 7 cursos)
+|   |-- Depoimentos (grid 2 colunas, 5 alunos)
+|   |-- Galeria de Turmas (12 fotos)
+|   +-- Footer (links, contato, social)
+|
+|-- /quem-somos.html (QUEM SOMOS)
+|   |-- Hero centralizado
+|   |-- Missao, Visao e Valores (3 cards, checkmarks)
+|   |-- Nossa Equipe (Milena, Licea, Myrna)
+|   +-- Parceiros Institucionais (UNICORP, Sapiencia)
+|
+|-- /cursos.html (NOSSOS CURSOS)
+|   |-- Filtro por categoria e busca
+|   |-- Grid de cursos (carregado de cursos.json)
+|   +-- 26 cursos em 5 categorias
+|       |
+|       +-- /curso.html?id=SLUG (FICHA DO CURSO)
+|           |-- Imagem de capa (arte completa, sem corte)
+|           |-- Titulo + categoria + nivel
+|           |-- Objetivo (condicional)
+|           |-- Descricao
+|           |-- Diferencial (condicional)
+|           |-- Publico-alvo (condicional)
+|           |-- Carga horaria + Duracao
+|           |-- Coordenador (condicional)
+|           |-- Corpo Docente (condicional, dinamico)
+|           |-- Matriz Curricular (condicional)
+|           |-- Valor (condicional)
+|           |-- Contato inscricao (condicional)
+|           |-- Link cadastro (condicional)
+|           +-- CTA WhatsApp
+|
+|-- /solucoes.html (SOLUCOES EDUCACIONAIS)
+|   |-- Pos-Graduacoes Presenciais → cursos.html
+|   |-- Cursos de Formacao e Treinamentos
+|   |-- Mestrados e Doutorados (Internacionais)
+|   |-- Tecnologo Superior EAD (em breve)
+|   +-- Graduacoes EAD (em breve)
+|
+|-- /contato.html (CONTATO)
+|   |-- Formulario → WhatsApp
+|   |-- Informacoes (telefone, endereco, redes)
+|   +-- Google Maps
+|
+|-- /admin (PAINEL ADMINISTRATIVO) [requer login]
+|   |-- Login (usuario/senha)
+|   |-- Listagem de cursos (busca, filtros)
+|   |-- CRUD de cursos (criar, editar, excluir)
+|   |-- Upload de imagens (JPG, PNG, WebP)
+|   +-- Professores dinamicos
+|
+|-- /robots.txt (regras para bots)
+|-- /sitemap.xml (mapa para buscadores)
+|
++-- LINKS EXTERNOS
+    |-- wa.me/558396865555 (WhatsApp)
+    |-- instagram.com/uninovare
+    |-- linkedin.com/company/uninovare
+    +-- app.siaf360.com.br/login/uninovare (Portal Academico)
+```
+
+### Fluxo de Navegacao
+
+```
+                    +------------------+
+                    |    VISITANTE     |
+                    +--------+---------+
+                             |
+              +--------------+--------------+
+              |              |              |
+         +----v----+   +----v----+   +-----v-----+
+         |  HOME   |   | CURSOS  |   |  CONTATO  |
+         +---------+   +----+----+   +-----------+
+              |              |              |
+              |         +----v----+         |
+              |         |  FICHA  |         |
+              |         |  CURSO  |         |
+              |         +----+----+         |
+              |              |              |
+              +--------------+--------------+
+                             |
+                      +------v------+
+                      |  WHATSAPP   |
+                      |  (matricula)|
+                      +-------------+
+
+
+                    +------------------+
+                    | ADMINISTRADOR    |
+                    +--------+---------+
+                             |
+                      +------v------+
+                      |   /admin    |
+                      |   LOGIN     |
+                      +------+------+
+                             |
+                      +------v------+
+                      |   PAINEL    |
+                      |   CURSOS    |
+                      +------+------+
+                        |    |    |
+                   +----+ +--+--+ +----+
+                   |NOVO| |EDIT | |DEL |
+                   +----+ +-----+ +----+
+                             |
+                      +------v------+
+                      | cursos.json |
+                      | (atualizado)|
+                      +------+------+
+                             |
+                      +------v------+
+                      | SITE PUBLICO|
+                      | (atualizado)|
+                      +-------------+
+```
+
+### Categorias de Cursos (26 total)
+
+| Categoria | Qtd | Cursos |
+|-----------|-----|--------|
+| **Psicologia** | 8 | ABA, Neuropsicologia, Psicologia Clinica e Hospitalar, TCC, Avaliacao Psicologica, Clinica Psicanalitica, Saude Mental, Neurociencia e Comportamento |
+| **Educacao** | 9 | Neuropsicopedagogia, AEE, TDAH, Neurociencia Infantil, Ed. Inclusiva e Tec. Assistiva, TEA e TGD, Neurociencia e Psicomotricidade, Gestao Escolar, Neuroeducacao |
+| **Saude** | 3 | Cuidados Paliativos, Oncologia, Gerontologia |
+| **Gestao** | 5 | MBA Saude Publica, MBA Projetos Sociais, MBA Gestao Publica, MBA Gestao de Pessoas, MBA Legislacao Trabalhista |
+| **Comunicacao** | 1 | MBA Producao de Conteudo para Midias Digitais |
+
+---
+
+## 3. VISAO GERAL
+
+### O que mudou (v1.0 → v2.1)
+
+| Aspecto | v1.0 (anterior) | v2.1 (atual) |
 |---------|-----------------|--------------|
-| Estrutura | One-page (1 HTML) | Multi-página (7 páginas + admin) |
+| Estrutura | One-page (1 HTML) | Multi-pagina (7 paginas + admin web) |
 | Fontes | Baloo 2 + Merriweather | Baloo 2 + Open Sans |
-| Cursos | Lista estática no HTML | Sistema dinâmico via JSON + Admin web |
-| Administração | Edição manual do HTML | Painel web com login em uninovare.com.br/admin |
-| SEO | Básico | Completo (robots.txt, sitemap, JSON-LD, Open Graph) |
-| Navegação | Âncoras internas | Páginas separadas + Portal Acadêmico |
+| Cursos | Lista estatica no HTML | 26 cursos dinamicos via JSON + Admin web |
+| Administracao | Edicao manual do HTML | Painel web com login, busca, filtros, upload |
+| SEO | Basico | Completo (robots, sitemap, JSON-LD, Open Graph) |
+| Navegacao | Ancoras internas | Paginas separadas + Portal Academico |
+| Banner | Imagem generica | Arte institucional personalizada |
+| Artes cursos | Fotos genericas JPG | 7 artes profissionais PNG (1200x675) |
+| Valores | Lista simples | Checkmarks verdes em circulo |
 | Deploy | FileZilla manual | Script Python automatizado |
 
-### Tecnologias
+### Stack Tecnica
 
-| Tecnologia | Uso |
-|-----------|-----|
-| HTML5 | Estrutura semântica |
-| CSS3 | Estilos, layout responsivo |
-| JavaScript (Vanilla) | Interatividade no frontend |
-| Node.js + Express | Backend do painel admin |
-| JSON | Banco de dados dos cursos |
-| pm2 | Gerenciador de processos (admin) |
-| Nginx | Servidor web + proxy reverso |
-| Let's Encrypt | Certificado SSL (HTTPS) |
-| Google Fonts | Baloo 2 (títulos) + Open Sans (corpo) |
+| Camada | Tecnologia | Arquivo(s) |
+|--------|-----------|------------|
+| Markup | HTML5 semantico | *.html |
+| Estilo | CSS3 (variaveis, grid, flexbox) | css/*.css |
+| Interatividade | JavaScript Vanilla (ES6) | js/*.js |
+| Dados | JSON flat-file | data/cursos.json |
+| Admin Backend | Node.js 20 + Express 4 | admin-server/server.js |
+| Processo | pm2 | Gerencia o admin |
+| Web Server | Nginx 1.24 | /etc/nginx/sites-available/uninovare |
+| SSL | Let's Encrypt (Certbot) | Renovacao automatica |
+| Versionamento | Git + GitHub | github.com/JPauloSantos/uninovare-site |
 
 ---
 
-## 2. ESTRUTURA DE ARQUIVOS
+## 4. ESTRUTURA DE ARQUIVOS
 
-### No seu computador (repositório Git)
+### Computador local (repositorio Git)
 
 ```
 PROJETO SITE UNINOVARE/
 ├── .gitignore
-├── DOCS.md                    ← ESTE ARQUIVO
-├── GUIA-PASSO-A-PASSO.md     ← Guia de como o site foi construído
-├── deploy.py                  ← Script de deploy automático
+├── DOCS.md                         ← ESTE ARQUIVO
+├── deploy.py                       ← Script de deploy automatico
+├── gerar-pdf.py                    ← Gera PDF da documentacao
+├── UNINOVARE-Documentacao-Tecnica-v2.pdf
 │
-├── site/                      ← ARQUIVOS DO SITE (vão para o servidor)
-│   ├── index.html             ← Página Home
-│   ├── quem-somos.html        ← Quem Somos
-│   ├── cursos.html            ← Listagem de cursos
-│   ├── curso.html             ← Ficha individual do curso
-│   ├── solucoes.html          ← Soluções Educacionais
-│   ├── contato.html           ← Contato
-│   ├── admin.html             ← (legado, não usado mais)
-│   ├── robots.txt             ← Regras para robôs de busca
-│   ├── sitemap.xml            ← Mapa do site
+├── site/                           ← SITE PUBLICO (vai para o servidor)
+│   ├── index.html                  ← Home
+│   ├── quem-somos.html             ← Quem Somos
+│   ├── cursos.html                 ← Listagem de cursos
+│   ├── curso.html                  ← Ficha individual (?id=slug)
+│   ├── solucoes.html               ← Solucoes Educacionais
+│   ├── contato.html                ← Contato
+│   ├── robots.txt                  ← Regras para bots
+│   ├── sitemap.xml                 ← Mapa do site
 │   ├── css/
-│   │   ├── global.css         ← Estilos globais (todos usam)
-│   │   ├── home.css           ← Estilos só da Home
-│   │   ├── cursos.css         ← Estilos de listagem/ficha
-│   │   ├── quem-somos.css     ← Estilos Quem Somos
-│   │   ├── solucoes.css       ← Estilos Soluções
-│   │   └── admin.css          ← (legado)
+│   │   ├── global.css              ← Estilos globais (TODOS usam)
+│   │   ├── home.css                ← So da Home
+│   │   ├── cursos.css              ← Listagem + ficha curso
+│   │   ├── quem-somos.css          ← So Quem Somos
+│   │   └── solucoes.css            ← So Solucoes
 │   ├── js/
-│   │   ├── global.js          ← Menu, scroll reveal, form WhatsApp
-│   │   ├── carousel.js        ← Carrossel reutilizável
-│   │   ├── cursos.js          ← Listagem com filtro (cursos.html)
-│   │   ├── curso-detalhe.js   ← Ficha individual (curso.html)
-│   │   └── admin.js           ← (legado)
+│   │   ├── global.js               ← Menu, reveal, WhatsApp form
+│   │   ├── carousel.js             ← Fabrica de carrossel
+│   │   ├── cursos.js               ← Listagem com filtro
+│   │   └── curso-detalhe.js        ← Ficha individual
 │   ├── data/
-│   │   └── cursos.json        ← BANCO DE DADOS DOS CURSOS
+│   │   └── cursos.json             ← BANCO DE DADOS (26 cursos)
 │   └── assets/
-│       ├── logos/             ← logo-horizontal.jpg, logo-vertical.jpg, logo-circular.jpg
-│       ├── banners/           ← banner-npp.png (banner do topo)
-│       ├── cursos/            ← Capas dos cursos (aba.jpg, tcc.jpg, etc.)
-│       ├── professores/       ← Fotos dos professores (a adicionar)
-│       ├── equipe/            ← ceo-milena.jpg
-│       └── gallery/           ← turma-01.jpg a turma-12.jpg
+│       ├── logos/                   ← 3 logos (horizontal, vertical, circular)
+│       ├── banners/                 ← Banner institucional principal
+│       ├── cursos/                  ← 7 artes PNG + JPGs antigos
+│       ├── professores/            ← Fotos professores (a adicionar)
+│       ├── equipe/                 ← ceo-milena.jpg
+│       └── gallery/                ← 12 fotos de turmas
 │
-├── admin-server/              ← BACKEND DO PAINEL ADMIN
-│   ├── package.json
-│   └── server.js              ← Servidor Express (login, CRUD, upload)
-│
-└── uninovare-site-working-no-identidade/  ← Site antigo (v1.0, referência)
+└── admin-server/                   ← BACKEND ADMIN
+    ├── package.json
+    └── server.js                   ← Express: login, CRUD, upload
 ```
 
-### No servidor VPS (187.77.33.115)
+### Servidor VPS (187.77.33.115)
 
 ```
-/var/www/uninovare/            ← Site público (conteúdo da pasta site/)
-/var/www/uninovare-admin/      ← Backend admin (conteúdo de admin-server/)
-/var/www/uninovare-backup-*.tar.gz  ← Backups do site anterior
-/etc/nginx/sites-available/uninovare  ← Config do Nginx
-/etc/letsencrypt/live/uninovare.com.br/  ← Certificados SSL
+/var/www/uninovare/                 ← Site publico
+/var/www/uninovare-admin/           ← Backend admin (Node.js)
+/var/www/uninovare-backup-*.tar.gz  ← Backups
+/etc/nginx/sites-available/uninovare ← Config Nginx
+/etc/letsencrypt/live/uninovare.com.br/ ← Certificados SSL
 ```
 
 ---
 
-## 3. COMO O SITE FOI CONSTRUIDO
+## 5. COMO O SITE FOI CONSTRUIDO
 
-### Passo 1 — Fundação (CSS Global + Tipografia)
-
+### Passo 1 — Fundacao (CSS Global)
 **Arquivo:** `site/css/global.css`
+- Variaveis CSS: cores, sombras, border-radius, container
+- Paleta: verde (#3A7D44), amarelo (#FFC857), areia (#F3E9D2)
+- Tipografia: Baloo 2 (titulos) + Open Sans (corpo)
+- Componentes: .btn, .card, .pill, .section, .grid, .carousel, .gallery, .form
+- Responsivo: 900px, 740px, 480px
+- Acessibilidade: skip link, ARIA, prefers-reduced-motion
 
-Criamos o CSS global com:
-- **Variáveis CSS** (`:root`) para cores, sombras, border-radius
-- **Paleta:** `--primary: #3A7D44` (verde), `--accent: #FFC857` (amarelo), `--sand: #F3E9D2` (fundo), `--ink: #1f2a2e` (texto)
-- **Tipografia:** Baloo 2 para títulos, Open Sans para corpo
-- **Componentes reutilizáveis:** `.btn`, `.card`, `.pill`, `.section`, `.grid`, `.carousel`, `.gallery`, `.form`
-- **Responsivo:** breakpoints em 900px, 740px, 480px
-- **Acessibilidade:** skip link, focus states, prefers-reduced-motion
+### Passo 2 — Navegacao (Header)
+**Onde:** Topo de cada HTML (copiado, nao e componente)
+- Logo, icones sociais, menu (Home, Quem Somos, Cursos, Solucoes, Contato)
+- Botao Portal Academico (SIAF360)
+- Menu hamburger no mobile
 
-**Se quiser mudar cores:** edite as variáveis no `:root` de `global.css` (linhas 1-20).
-**Se quiser mudar fontes:** edite o import do Google Fonts no `<head>` de cada HTML e o `font-family` no `global.css`.
+### Passo 3 — Home (index.html + home.css)
+- Banner full-width ponta a ponta (arte institucional)
+- Hero 2 colunas (texto + card UNINOVARE + badge Campina Grande)
+- 4 cards de diferenciais
+- Carrossel 7 cursos em destaque (hardcoded no HTML)
+- 5 depoimentos em grid 2 colunas
+- Galeria 12 fotos
 
-### Passo 2 — Navegação (Header compartilhado)
+### Passo 4 — Quem Somos (quem-somos.html + quem-somos.css)
+- Hero centralizado
+- Missao/Visao/Valores com checkmarks verdes
+- Equipe: Milena (foto), Licea e Myrna (placeholders)
+- Parceiros: UNICORP Faculdades, Instituto Sapiencia PB
 
-**Onde:** Cada arquivo HTML contém o header no topo (não é componente, é copiado).
+### Passo 5 — Sistema de Cursos (cursos.json + JS)
+- 26 cursos em 5 categorias
+- Listagem com filtro por categoria (cursos.html + cursos.js)
+- Ficha individual com campos condicionais (curso.html + curso-detalhe.js)
+- Imagens mostram arte completa sem corte
 
-A navegação tem:
-- Logo (link para index.html)
-- Ícones sociais (Instagram, LinkedIn, Facebook)
-- Links: Home, Quem Somos, Nossos Cursos, Soluções Educacionais, Contato
-- Botão Portal Acadêmico (link externo para SIAF360)
-- Menu hamburguer no mobile
-
-**Se quiser adicionar um link no menu:** edite o `<nav id="menu">` em TODOS os 6 HTMLs.
-**Se quiser mudar o link do Portal:** busque `siaf360` nos HTMLs.
-
-### Passo 3 — Página Home (index.html)
-
-**Arquivos:** `site/index.html` + `site/css/home.css`
-
-Seções da Home (na ordem):
-1. **Banner** — Imagem full-width no topo (`assets/banners/banner-npp.png`), barra com texto + botão CTA
-2. **Hero** — Grid 2 colunas: texto à esquerda, card UNINOVARE à direita com badge "Campina Grande"
-3. **Por que escolher** — Grid 4 cards com ícones SVG e diferenciais
-4. **Cursos em destaque** — Carrossel horizontal com 7 cursos hardcoded no HTML
-5. **Depoimentos** — Grid 2 colunas com 5 depoimentos
-6. **Galeria** — Grid de 12 fotos de turmas
-7. **Footer** — Logo, links, contato, copyright
-
-**Se quiser trocar o banner:** substitua `assets/banners/banner-npp.png` e edite o texto na `<div class="heroBanner__bar">`.
-**Se quiser mudar cursos do carrossel:** edite os `<article>` dentro de `#cursosTrack` no `index.html`.
-**Se quiser mudar depoimentos:** edite os `<article>` na seção `#depoimentos`.
-
-### Passo 4 — Página Quem Somos (quem-somos.html)
-
-**Arquivos:** `site/quem-somos.html` + `site/css/quem-somos.css`
-
-Seções:
-1. Hero com apresentação institucional
-2. Missão, Visão e Valores (3 cards)
-3. Equipe (Milena, Lícea, Myrna) — Lícea e Myrna têm placeholder, substituir por fotos reais
-4. Parceiros institucionais
-
-**Se quiser adicionar membro à equipe:** copie um `<article class="card card--equipe">` e edite nome/cargo/foto.
-**Se quiser mudar Missão/Visão/Valores:** edite o texto diretamente nos cards `.mvv-card`.
-
-### Passo 5 — Sistema de Cursos (cursos.json + cursos.html + curso.html)
-
-**Banco de dados:** `site/data/cursos.json`
-**Listagem:** `site/cursos.html` + `site/js/cursos.js`
-**Ficha individual:** `site/curso.html` + `site/js/curso-detalhe.js`
-**CSS:** `site/css/cursos.css`
-
-Cada curso no JSON tem esta estrutura:
-```json
-{
-  "id": "slug-unico",
-  "nome": "Nome do Curso",
-  "categoria": "Psicologia|Educação|Saúde|Gestão|Comunicação",
-  "nivel": "Especialização|MBA|Mestrado|Doutorado",
-  "capa": "assets/cursos/arquivo.jpg",
-  "descricao": "Descrição completa",
-  "diferencial": "Frase curta",
-  "objetivo": "Objetivo do curso",
-  "publicoAlvo": "Para quem é",
-  "cargaHoraria": "360 h/a",
-  "duracao": "15 meses",
-  "coordenador": { "nome": "Nome", "fone": "" },
-  "professores": [
-    { "foto": "", "nome": "", "miniCurriculo": "", "titulacao": "" }
-  ],
-  "matrizCurricular": "",
-  "valor": "",
-  "contatoInscricao": "",
-  "linkCadastro": "",
-  "destaque": true
-}
-```
-
-**Regra fundamental:** Campos vazios (`""`, `[]`) NÃO aparecem na ficha do curso. Preencha conforme necessário.
-
-**Se quiser adicionar/editar cursos:** Use o painel admin (uninovare.com.br/admin) — é a forma mais fácil.
-**Se quiser editar manualmente:** Edite `site/data/cursos.json` e faça deploy.
-
-### Passo 6 — Soluções Educacionais (solucoes.html)
-
-**Arquivos:** `site/solucoes.html` + `site/css/solucoes.css`
-
-Cards de serviços:
-- Pós-Graduações Presenciais (link para cursos.html)
-- Cursos de Formação e Treinamentos
-- Mestrados e Doutorados (Programas Internacionais)
-- Tecnólogo Superior EAD (Em breve)
-- Graduações EAD (Em breve)
-
-**Se quiser ativar EAD/Graduações:** remova a classe disabled do botão e mude o texto "Em breve".
+### Passo 6 — Solucoes (solucoes.html)
+- 5 cards de servicos (pos, formacao, mestrados, EAD em breve)
 
 ### Passo 7 — Contato (contato.html)
+- Formulario → WhatsApp (sem backend)
+- Mapa Google Maps
 
-**Arquivo:** `site/contato.html`
-
-Formulário que envia para WhatsApp (sem backend). O JS está em `global.js` (busca por `#contactForm`).
-
-**Se quiser mudar o número do WhatsApp:** busque `558396865555` em TODOS os arquivos HTML e JS.
-
-### Passo 8 — Painel Admin (admin-server/)
-
-**Arquivo principal:** `admin-server/server.js`
-
-Backend Express.js que:
-- Roda na porta 3055
-- Login com sessão
-- API REST para cursos (GET/POST/DELETE)
-- Edita `cursos.json` diretamente no servidor
-- Acessível em uninovare.com.br/admin
-
-Detalhes completos na seção 5.
+### Passo 8 — Admin Web (admin-server/server.js)
+- Node.js + Express na porta 3055
+- Login com sessao, Nginx proxy em /admin
+- CRUD de cursos, upload de imagens, busca/filtro
+- Edita cursos.json diretamente no servidor
 
 ### Passo 9 — SEO
-
-Em cada HTML:
-- Meta tags (description, keywords, author, robots)
-- Open Graph (Facebook, WhatsApp, LinkedIn)
-- Twitter Cards
-- JSON-LD (dados estruturados para Google)
-- Canonical URL
-
-Arquivos globais: `robots.txt` e `sitemap.xml`
+- robots.txt, sitemap.xml
+- Meta tags, Open Graph, Twitter Cards, JSON-LD
+- HTML5 semantico, ARIA labels
 
 ### Passo 10 — Deploy
-
-O deploy envia os arquivos de `site/` para `/var/www/uninovare/` no VPS via SFTP (script `deploy.py`).
-
----
-
-## 4. ONDE MEXER NO CODIGO
-
-### Guia rápido por tarefa
-
-| Quero... | Arquivo(s) a editar |
-|----------|-------------------|
-| Mudar cores do site | `site/css/global.css` (variáveis `:root`) |
-| Mudar fontes | `site/css/global.css` + `<head>` dos HTMLs |
-| Trocar banner da home | `site/assets/banners/` + `site/index.html` (seção heroBanner) |
-| Trocar logo | `site/assets/logos/` (manter mesmo nome) |
-| Editar texto da home | `site/index.html` |
-| Editar Quem Somos | `site/quem-somos.html` |
-| Editar Missão/Visão/Valores | `site/quem-somos.html` (seção mvv) |
-| Adicionar membro à equipe | `site/quem-somos.html` (copiar card equipe) |
-| Adicionar foto de equipe | `site/assets/equipe/` + editar HTML |
-| Adicionar/editar curso | **Usar o admin:** uninovare.com.br/admin |
-| Editar curso manualmente | `site/data/cursos.json` |
-| Mudar cursos do carrossel (home) | `site/index.html` (seção #cursosTrack) |
-| Adicionar depoimento | `site/index.html` (seção #depoimentos) |
-| Trocar fotos da galeria | `site/assets/gallery/` (manter nomes turma-XX.jpg) |
-| Adicionar foto à galeria | `site/assets/gallery/` + editar `index.html` |
-| Mudar número WhatsApp | Buscar `558396865555` em todos os arquivos |
-| Mudar endereço | Buscar "Cirne Center" nos HTMLs |
-| Mudar link Portal Acadêmico | Buscar `siaf360` nos HTMLs |
-| Ativar EAD/Graduações | `site/solucoes.html` (remover disabled) |
-| Mudar credenciais do admin | `admin-server/server.js` (ADMIN_USER, ADMIN_PASS) |
-| Adicionar página nova | Criar HTML, copiar header/footer de outro, add no nav |
-
-### Estrutura CSS (o que cada arquivo faz)
-
-| Arquivo | Escopo | O que contém |
-|---------|--------|-------------|
-| `global.css` | Todas as páginas | Reset, variáveis, tipografia, botões, cards, pills, grids, carrossel, galeria, formulários, footer, responsivo |
-| `home.css` | Só index.html | Banner hero, hero grid, seção "por que escolher", depoimentos, galeria estilo álbum |
-| `cursos.css` | cursos.html + curso.html | Filtros, cards de curso, ficha detalhada, professores |
-| `quem-somos.css` | quem-somos.html | Missão/Visão/Valores, equipe, parceiros |
-| `solucoes.css` | solucoes.html | Cards de serviços, badges "em breve" |
-
-### Estrutura JS (o que cada arquivo faz)
-
-| Arquivo | Escopo | O que faz |
-|---------|--------|----------|
-| `global.js` | Todas as páginas | Menu mobile, active nav link, scroll reveal, form WhatsApp, ano no footer |
-| `carousel.js` | Páginas com carrossel | Fábrica `makeCarousel()` — auto-play, dots, navegação |
-| `cursos.js` | cursos.html | Fetch cursos.json, renderiza grid, filtro por categoria |
-| `curso-detalhe.js` | curso.html | Fetch cursos.json, renderiza ficha com campos condicionais |
+- Script deploy.py (SFTP via paramiko)
+- Backup automatico antes de sobrescrever
 
 ---
 
-## 5. SISTEMA ADMIN
+## 6. ONDE MEXER NO CODIGO
+
+| Quero... | Arquivo(s) |
+|----------|-----------|
+| Mudar cores | `css/global.css` (variaveis `:root`, linhas 1-20) |
+| Mudar fontes | `css/global.css` + `<head>` dos HTMLs |
+| Trocar banner da home | `assets/banners/` + `index.html` (secao heroBanner) |
+| Trocar logo | `assets/logos/` (manter mesmo nome) |
+| Editar texto da home | `index.html` |
+| Editar Quem Somos | `quem-somos.html` |
+| Editar Missao/Visao/Valores | `quem-somos.html` (secao mvv) |
+| Adicionar membro a equipe | `quem-somos.html` (copiar card equipe) |
+| Adicionar/editar curso | **Admin web:** uninovare.com.br/admin |
+| Editar curso manualmente | `data/cursos.json` |
+| Mudar cursos do carrossel | `index.html` (secao #cursosTrack) |
+| Adicionar depoimento | `index.html` (secao #depoimentos) |
+| Trocar fotos da galeria | `assets/gallery/` (manter nomes turma-XX.jpg) |
+| Mudar numero WhatsApp | Buscar `558396865555` em todos os arquivos |
+| Mudar endereco | Buscar "Cirne Center" nos HTMLs |
+| Mudar link Portal Academico | Buscar `siaf360` nos HTMLs |
+| Ativar EAD/Graduacoes | `solucoes.html` (remover disabled) |
+| Mudar credenciais admin | `admin-server/server.js` (linhas 16-17) |
+| Adicionar pagina nova | Criar HTML, copiar header/footer, add no nav de TODOS |
+
+### Mapa CSS
+
+| Arquivo | Escopo | Conteudo |
+|---------|--------|---------|
+| `global.css` | Todas as paginas | Reset, variaveis, tipografia, botoes, cards, pills, grids, carrossel, galeria, forms, footer, responsivo, nav portal |
+| `home.css` | index.html | Banner full-width, hero grid, diferenciais, depoimentos, galeria album |
+| `cursos.css` | cursos.html + curso.html | Filtros, cards curso, ficha detalhada (imagem sem corte), professores |
+| `quem-somos.css` | quem-somos.html | MVV (checkmarks), equipe (fotos/placeholders), parceiros |
+| `solucoes.css` | solucoes.html | Cards servicos, badges "em breve" |
+
+### Mapa JS
+
+| Arquivo | Escopo | Funcao |
+|---------|--------|--------|
+| `global.js` | Todas as paginas | Menu mobile, active nav, scroll reveal, form WhatsApp, ano footer |
+| `carousel.js` | Paginas com carrossel | Fabrica `makeCarousel()` — autoplay, dots, setas |
+| `cursos.js` | cursos.html | Fetch cursos.json, grid, filtro categoria |
+| `curso-detalhe.js` | curso.html | Fetch cursos.json, ficha com campos condicionais |
+
+---
+
+## 7. SISTEMA ADMIN
 
 ### Acesso
+- **URL:** https://uninovare.com.br/admin
+- **Usuario:** admin
+- **Senha:** uninovare2026
 
-**URL:** https://uninovare.com.br/admin
-**Usuário:** admin
-**Senha:** uninovare2026
-
-### Como funciona
-
-1. O admin é um servidor Node.js/Express rodando na porta 3055
-2. O Nginx faz proxy: `/admin` e `/api` → porta 3055
-3. Login cria uma sessão (cookie) que dura 4 horas
-4. As operações leem/escrevem diretamente no `/var/www/uninovare/data/cursos.json`
-5. Alterações refletem imediatamente no site público
+### Funcionalidades
+- Login com sessao (4h)
+- Listagem agrupada por categoria com thumbnails
+- **Busca por nome** (tempo real)
+- **Filtro por nivel** (Especializacao, MBA, Mestrado, Doutorado)
+- **Filtro por categoria** (Psicologia, Educacao, Saude, Gestao, Comunicacao)
+- Criar, editar, excluir cursos
+- **Upload de capa** (JPG, PNG, WebP) com preview
+- **Remover imagem** de capa
+- **Professores dinamicos** (adicionar/remover)
+- Campos condicionais (vazios nao aparecem no site)
+- Badge "Sem capa" e "Destaque"
+- Alteracoes refletem imediatamente no site
 
 ### API Endpoints
 
-| Método | Rota | O que faz |
-|--------|------|----------|
-| POST | /api/login | Login (body: {usuario, senha}) |
+| Metodo | Rota | Funcao |
+|--------|------|--------|
+| POST | /api/login | Login |
 | POST | /api/logout | Logout |
-| GET | /api/cursos | Listar todos os cursos |
-| POST | /api/cursos | Criar ou atualizar curso |
+| GET | /api/cursos | Listar cursos |
+| POST | /api/cursos | Criar/atualizar curso |
 | DELETE | /api/cursos/:id | Excluir curso |
 | POST | /api/upload | Upload de imagem |
 
 ### Arquitetura
 
 ```
-Browser → HTTPS → Nginx (443) → proxy_pass → Express (3055)
-                              → static files → /var/www/uninovare/
-```
-
-### Mudar credenciais
-
-Edite `admin-server/server.js`:
-```javascript
-const ADMIN_USER = 'admin';      // Linha 16
-const ADMIN_PASS = 'uninovare2026';  // Linha 17
-```
-Depois faça deploy do admin (enviar server.js e `pm2 restart uninovare-admin`).
-
-### Reiniciar o admin
-
-```bash
-ssh root@187.77.33.115
-pm2 restart uninovare-admin
-pm2 logs uninovare-admin
+Navegador → HTTPS (443) → Nginx
+                            |
+                    /admin, /api → proxy_pass → Express (porta 3055)
+                    /            → arquivos estaticos (/var/www/uninovare/)
 ```
 
 ---
 
-## 6. SEO E INDEXACAO
+## 8. SEO E INDEXACAO
 
-### robots.txt
-- Permite indexação de todas as páginas
-- Bloqueia `/admin`
-- Aponta para sitemap.xml
-
-### sitemap.xml
-- 6 páginas públicas com lastmod, changefreq e priority
-
-### Meta Tags (todas as páginas)
-- `description` — descrição única por página
-- `keywords` — palavras-chave
-- `canonical` — URL canônica
-- Open Graph (og:title, og:description, og:image, og:url)
-- Twitter Cards
-- JSON-LD (Organization, EducationalOrganization, LocalBusiness, Course)
-
-### HTML Semântico
-- `<header>`, `<main>`, `<section>`, `<article>`, `<nav>`, `<footer>`
-- ARIA labels, roles, aria-expanded
-- `loading="lazy"` em imagens fora do viewport
-- `preconnect` para Google Fonts
+| Item | Implementacao |
+|------|--------------|
+| robots.txt | Permite tudo, bloqueia /admin, aponta sitemap |
+| sitemap.xml | 6 paginas publicas com prioridades |
+| Meta description | Unica por pagina |
+| Meta keywords | Relevantes por pagina |
+| Canonical URL | Em todas as paginas |
+| Open Graph | og:title, og:description, og:image, og:url |
+| Twitter Cards | summary_large_image |
+| JSON-LD | Organization, EducationalOrganization, LocalBusiness, Course |
+| HTML5 semantico | header, main, section, article, nav, footer |
+| ARIA | Labels, roles, aria-expanded |
+| Performance | lazy loading, preconnect, gzip |
 
 ---
 
-## 7. INFRAESTRUTURA E DEPLOY
+## 9. INFRAESTRUTURA E DEPLOY
 
 ### Servidor
 
@@ -405,192 +473,108 @@ pm2 logs uninovare-admin
 | IP | 187.77.33.115 |
 | SO | Ubuntu 24.04 LTS |
 | Web Server | Nginx 1.24 |
-| SSL | Let's Encrypt (renovação automática) |
+| SSL | Let's Encrypt (auto) |
 | Node.js | v20.20.1 |
-| pm2 | Gerenciador de processos |
-| SSH | `ssh root@187.77.33.115` |
+| pm2 | Gerenciador processos |
 
-### Nginx Config
+### Deploy do site
 
-Arquivo: `/etc/nginx/sites-available/uninovare`
-
-```nginx
-server {
-    server_name uninovare.com.br www.uninovare.com.br;
-    root /var/www/uninovare;
-    index index.html;
-
-    # Admin panel → Node.js
-    location /admin { proxy_pass http://127.0.0.1:3055; ... }
-    location /api   { proxy_pass http://127.0.0.1:3055; ... }
-
-    # Site estático
-    location / { try_files $uri $uri/ =404; }
-
-    # SSL (Certbot)
-    listen 443 ssl;
-    ssl_certificate /etc/letsencrypt/live/uninovare.com.br/fullchain.pem;
-    ...
-}
-```
-
-### Como fazer deploy do SITE
-
-**Opção 1 — Script automático:**
 ```bash
+# Automatico (envia site/ para /var/www/uninovare/):
 python deploy.py
+
+# Manual via FileZilla:
+# Host: sftp://187.77.33.115 | User: root | Porta: 22
 ```
-(Envia `site/` para `/var/www/uninovare/` via SFTP)
 
-**Opção 2 — Manual via FileZilla:**
-- Host: sftp://187.77.33.115
-- Usuário: root
-- Porta: 22
-- Enviar conteúdo de `site/` para `/var/www/uninovare/`
-
-### Como fazer deploy do ADMIN
+### Deploy do admin
 
 ```bash
-# No seu computador:
 scp admin-server/server.js root@187.77.33.115:/var/www/uninovare-admin/
-
-# No servidor:
-ssh root@187.77.33.115
-pm2 restart uninovare-admin
+ssh root@187.77.33.115 "pm2 restart uninovare-admin"
 ```
 
-### Processos pm2
+### Comandos uteis no VPS
 
 ```bash
-pm2 list                     # Ver processos
-pm2 restart uninovare-admin  # Reiniciar admin
-pm2 logs uninovare-admin     # Ver logs
-pm2 save                     # Salvar lista de processos
+pm2 list                      # Ver processos
+pm2 restart uninovare-admin   # Reiniciar admin
+pm2 logs uninovare-admin      # Ver logs
+systemctl status nginx        # Verificar Nginx
+systemctl reload nginx        # Recarregar config
+certbot certificates          # Ver SSL
 ```
 
 ---
 
-## 8. MANUTENCAO E TROUBLESHOOTING
+## 10. MANUTENCAO E TROUBLESHOOTING
 
 ### Checklist mensal
-
-- [ ] Site acessível via HTTPS (https://uninovare.com.br)
-- [ ] Certificado SSL válido (`certbot certificates`)
+- [ ] Site acessivel (https://uninovare.com.br)
+- [ ] SSL valido (`certbot certificates`)
 - [ ] Nginx rodando (`systemctl status nginx`)
 - [ ] Admin rodando (`pm2 list`)
-- [ ] Links do WhatsApp funcionando
+- [ ] WhatsApp funcionando
 - [ ] Banner atualizado
 
-### Trocar o banner
+### Problemas comuns
 
-1. Criar imagem (min 1200px largura, JPG ou PNG)
-2. Salvar em `site/assets/banners/` como `banner-NOME.png`
-3. Editar `site/index.html` — trocar o `src` na tag `<img>` da seção `.heroBanner`
-4. Editar o texto na `<div class="heroBanner__bar">`
-5. Fazer deploy
-
-### Atualizar fotos da galeria
-
-1. Salvar fotos como `turma-XX.jpg` em `site/assets/gallery/`
-2. Fazer deploy (as fotos com mesmo nome são substituídas)
-
-### Adicionar foto da equipe
-
-1. Salvar foto em `site/assets/equipe/` (ex: `licea-araujo.jpg`)
-2. Editar `site/quem-somos.html` — trocar o `<div class="equipe__photo-placeholder">` por `<img src="assets/equipe/licea-araujo.jpg">`
-3. Fazer deploy
-
-### Site fora do ar
-
-```bash
-ssh root@187.77.33.115
-systemctl status nginx      # Verificar Nginx
-systemctl restart nginx     # Reiniciar
-nginx -t                    # Testar config
-pm2 list                    # Verificar admin
-pm2 restart all             # Reiniciar tudo
-```
-
-### SSL expirado
-
-```bash
-certbot certificates        # Verificar validade
-certbot renew               # Renovar
-systemctl reload nginx      # Aplicar
-```
-
-### Admin não funciona
-
-```bash
-pm2 logs uninovare-admin --lines 30   # Ver erros
-pm2 restart uninovare-admin            # Reiniciar
-node /var/www/uninovare-admin/server.js  # Testar manual
-```
+| Problema | Solucao |
+|----------|---------|
+| Site fora do ar | `systemctl restart nginx` |
+| Admin nao funciona | `pm2 restart uninovare-admin && pm2 logs uninovare-admin` |
+| SSL expirado | `certbot renew && systemctl reload nginx` |
+| Imagem nao aparece | Verificar nome do arquivo (case-sensitive) e pasta |
+| Curso nao aparece | Verificar cursos.json (JSON valido?) |
 
 ---
 
-## 9. CREDENCIAIS E ACESSOS
+## 11. CREDENCIAIS E ACESSOS
 
-| Serviço | Acesso |
+| Servico | Acesso |
 |---------|--------|
-| **VPS SSH** | `ssh root@187.77.33.115` / senha: (consultar) |
-| **Admin do Site** | uninovare.com.br/admin / admin / uninovare2026 |
-| **Portal Acadêmico** | app.siaf360.com.br/login/uninovare |
-| **GitHub** | github.com/JPauloSantos/uninovare-site (privado) |
+| **VPS SSH** | root@187.77.33.115 |
+| **Admin Site** | uninovare.com.br/admin / admin / uninovare2026 |
+| **Portal Academico** | app.siaf360.com.br/login/uninovare |
+| **GitHub** | github.com/JPauloSantos/uninovare-site |
 | **Hostinger** | hpanel.hostinger.com / jpsisan@gmail.com |
-| **Registro.br** | registro.br / MACSO1637 |
+| **Registro.br** | MACSO1637 |
 | **WhatsApp** | (83) 9.9686-5555 |
 | **Telefone** | (83) 3099-5333 |
 | **Instagram** | @uninovare |
 | **LinkedIn** | /company/uninovare |
-| **Endereço** | Shopping Cirne Center, 2o andar, Centro, Campina Grande/PB |
-| **Domínio expira** | 15 de agosto de 2027 |
-| **SSL expira** | Renovação automática (Let's Encrypt) |
+| **Endereco** | Shopping Cirne Center, 2o andar, Centro, Campina Grande/PB |
+| **Dominio expira** | 15 de agosto de 2027 |
 
 ---
 
-## 10. HISTORICO DE VERSOES
+## 12. HISTORICO DE VERSOES
 
-| Versão | Data | Descrição |
+| Versao | Data | Descricao |
 |--------|------|-----------|
 | 1.0 | Mar 2026 | Site one-page original |
-| 2.0 | 27 Mar 2026 | Reestruturação completa: multi-página, sistema de cursos, admin web, SEO avançado |
+| 2.0 | 27 Mar 2026 | Reestruturacao completa: multi-pagina, sistema de cursos, admin web |
+| 2.1 | 06 Abr 2026 | Atualizacoes visuais (banner, artes cursos, checkmarks, centralizacao) |
 
-### Commits principais
+### Commits (mais recentes primeiro)
 
-| Commit | Descrição |
+| Commit | Descricao |
 |--------|-----------|
-| `c4ee029` | feat: reestruturação completa v2.0 (48 arquivos) |
-| `e6d0fb4` | fix: bugs de consistência HTML/JS |
-| `ff8b5e3` | fix: correções visuais hero + Portal Acadêmico |
-| `822b9a2` | fix: banner full-width centralizado |
-| `59e7bcb` | fix: banner ponta a ponta sem espaços |
-| `e921941` | feat: carrossel full-width |
-| `4e6ab38` | fix: cursos em destaque hardcoded no HTML |
+| `2cb6f60` | fix: imagem do curso nao corta mais |
+| `9d9d0ce` | feat: atualizacoes visuais Prof. Milena (banner, artes, checkmarks) |
+| `7e34f64` | docs: documentacao + PDF |
+| `4ebc7d4` | fix: botao remover imagem no admin |
+| `cf5dcf1` | feat: busca/filtro + upload capa no admin |
+| `519aae5` | fix: SyntaxError JS do admin |
+| `5195528` | fix: admin lista cursos (cookie + thumbnails) |
 | `7ac0ab3` | feat: sistema admin web Node.js/Express |
-| `519aae5` | fix: SyntaxError no JS do admin |
-| `4f52749` | fix: corrigir erro JS aspas escapadas no admin |
-| `5195528` | fix: admin lista cursos (cookie path + thumbnails) |
-| `721ffe0` | docs: documentação técnica completa |
-| `cf5dcf1` | feat: busca/filtro de cursos + upload de capa no admin |
-| `4ebc7d4` | fix: botão remover imagem + selecionar imagem |
-
-### Funcionalidades do Painel Admin (v2.0)
-
-- Login com sessão (4h de duração)
-- Listagem de cursos agrupados por categoria com thumbnails
-- **Busca por nome** do curso (tempo real)
-- **Filtro por nível** (Especialização, MBA, Mestrado, Doutorado)
-- **Filtro por categoria** (Psicologia, Educação, Saúde, Gestão, Comunicação)
-- Criar, editar e excluir cursos
-- **Upload de capa** (JPG, PNG, WebP) com preview
-- **Remover imagem** de capa
-- Professores dinâmicos (adicionar/remover)
-- Campos condicionais (vazios não aparecem no site)
-- Alterações refletem imediatamente no site público
-- Badge "Sem capa" para cursos sem imagem
-- Badge "Destaque" para cursos da home
+| `e921941` | feat: carrossel full-width |
+| `4e6ab38` | fix: cursos em destaque no HTML |
+| `822b9a2` | fix: banner full-width centralizado |
+| `ff8b5e3` | fix: hero + Portal Academico |
+| `e6d0fb4` | fix: bugs HTML/JS |
+| `c4ee029` | feat: reestruturacao completa v2.0 |
 
 ---
 
-*Documento atualizado em 27 de março de 2026.*
+*Documento atualizado em 06 de abril de 2026 — v2.1*
